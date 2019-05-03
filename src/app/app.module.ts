@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { HomeService } from './services/home.service';
+import { CookieService } from 'ngx-cookie-service';
+import { CarsComponent } from './cars/cars.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    CarsComponent,
   ],
   imports: [
     BrowserModule,
@@ -18,7 +19,7 @@ import { HomeService } from './services/home.service';
     FormsModule,
     HttpClientModule
   ],
-  providers: [HomeService],
+  providers: [HomeService,CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

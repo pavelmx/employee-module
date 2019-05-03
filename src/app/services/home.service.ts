@@ -9,11 +9,11 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class HomeService {
-  private resUrl = 'http://localhost:8081/simple';
+  private resUrl = 'http://localhost:8081/client';
 
   constructor(private http: HttpClient) { }
 
   getList(token: string): Observable<string[]> {
-    return this.http.get<string[]>(this.resUrl + "/cars?access_token=" + token);
+    return this.http.get<string[]>(this.resUrl + "/carsfree?access_token=" + token);
   }
 }
