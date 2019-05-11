@@ -7,11 +7,15 @@ import { AppComponent } from './app.component';
 import { HomeService } from './services/home.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CarsComponent } from './cars/cars.component';
+import { PrivateComponent } from './private/private.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CarsComponent,
+    PrivateComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

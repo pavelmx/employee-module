@@ -1,0 +1,7 @@
+<button class="btn btn-primary" routerLink="/home-server">Back to home</button>
+
+<strong>Private list of cars</strong>
+
+  <div *ngFor="let car of listData; let i = index">
+    {{i+1}} {{car}}
+  </div>

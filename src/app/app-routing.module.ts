@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CarsComponent } from './cars/cars.component';
+import { PrivateComponent } from './private/private.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
+  
   {
-    path: 'cars',
-    component: CarsComponent
+    path: 'private',
+    component: PrivateComponent
   },
   {
-    path: '',    
-    redirectTo: 'cars',
+    path: 'home-server',
+    component: HomeComponent
+  },
+  {
+    path: 'home',    
+    redirectTo: 'home-server',
     pathMatch: 'full'
   }
 ];
