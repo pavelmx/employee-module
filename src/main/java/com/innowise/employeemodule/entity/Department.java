@@ -24,6 +24,6 @@ public class Department extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
-    private Employee employee;
+    private Employee manager;
 
 }

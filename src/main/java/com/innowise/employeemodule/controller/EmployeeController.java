@@ -17,7 +17,7 @@ public class EmployeeController {
     private EmployeeService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<Employee> getById(@PathVariable Long id) {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
 
@@ -27,25 +27,33 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> create(Employee employee) {
-        return new ResponseEntity<>(service.add(employee), HttpStatus.CREATED);
+    public ResponseEntity<Employee> create(@RequestBody Employee employee,
+                                           @RequestParam Long position_id, @RequestParam Long department_id) {
+        return new ResponseEntity<>(service.create(employee, position_id, department_id), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Employee> update(Employee employee) {
+    public ResponseEntity<Employee> update(@RequestBody  Employee employee) {
         return new ResponseEntity<>(service.update(employee), HttpStatus.OK);
     }
-
+////////////////////
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Employee with id: '" + id + "' was deleted", HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         service.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("All employees deleted", HttpStatus.OK);
+    }
+////////////////////
+    @GetMapping("dismiss/{id}")
+    public ResponseEntity<String> dismissEmployeeById(@PathVariable Long id) {
+        service.dismissEmployee(id);
+        return new ResponseEntity<>("Employee with id: '" + id + "' was dismissed success", HttpStatus.OK);
     }
 
+    //reset employee
 }

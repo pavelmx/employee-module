@@ -23,6 +23,7 @@
             <column name="adress" value="Vitebsk, Moskovski avenue 70/2"/>
             <column name="email" value="pavel@email"/>
             <column name="skype" value="pavelskype"/>
+            <column name="phone_number" value="+375333447219"></column>
             <column name="description" />
         </insert>
     </changeSet>

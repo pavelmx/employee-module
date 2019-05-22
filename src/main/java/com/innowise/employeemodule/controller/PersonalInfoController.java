@@ -18,6 +18,7 @@ public class PersonalInfoController {
     @Autowired
     private PersonalInfoService service;
 
+    //////////////////////
     @GetMapping("/{id}")
     public ResponseEntity<PersonalInfo> getById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
@@ -29,25 +30,25 @@ public class PersonalInfoController {
     }
 
     @PostMapping
-    public ResponseEntity<PersonalInfo> create(PersonalInfo personalInfo) {
+    public ResponseEntity<PersonalInfo> create(@RequestBody PersonalInfo personalInfo) {
         return new ResponseEntity<>(service.add(personalInfo), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<PersonalInfo> update(PersonalInfo personalInfo) {
+    public ResponseEntity<PersonalInfo> update(@RequestBody PersonalInfo personalInfo) {
         return new ResponseEntity<>(service.update(personalInfo), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("PersonalInfo with id: '" + id + "' was deleted", HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         service.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("All PersonalInfo's deleted", HttpStatus.OK);
     }
-
+///////////////////////
 }

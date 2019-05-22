@@ -29,24 +29,30 @@ public class DepartmentEmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<DepartmentEmployee> create(DepartmentEmployee departmentEmployee) {
+    public ResponseEntity<DepartmentEmployee> create(@RequestBody DepartmentEmployee departmentEmployee) {
         return new ResponseEntity<>(service.add(departmentEmployee), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentEmployee> update(DepartmentEmployee departmentEmployee) {
+    public ResponseEntity<DepartmentEmployee> update(@RequestBody DepartmentEmployee departmentEmployee) {
         return new ResponseEntity<>(service.update(departmentEmployee), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable  Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("DepartmentEmployee with id: '" + id + "' was deleted", HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         service.deleteAll();
+        return new ResponseEntity<>("All DepartmentEmployee's deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/change")
+    public ResponseEntity<String> changeDepartment(@RequestParam Long newdepartment_id, @RequestParam Long employee_id){
+        service.changeDepartment(newdepartment_id, employee_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

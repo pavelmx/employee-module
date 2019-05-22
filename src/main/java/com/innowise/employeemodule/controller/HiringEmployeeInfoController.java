@@ -29,25 +29,25 @@ public class HiringEmployeeInfoController {
     }
 
     @PostMapping
-    public ResponseEntity<HiringEmployeeInfo> create(HiringEmployeeInfo hiringEmployeeInfo) {
+    public ResponseEntity<HiringEmployeeInfo> create(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
         return new ResponseEntity<>(service.add(hiringEmployeeInfo), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<HiringEmployeeInfo> update(HiringEmployeeInfo hiringEmployeeInfo) {
+    public ResponseEntity<HiringEmployeeInfo> update(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
         return new ResponseEntity<>(service.update(hiringEmployeeInfo), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("HiringEmployeeInfo with id: '" + id + "' was deleted", HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         service.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("All HiringEmployeeInfo's deleted", HttpStatus.OK);
     }
 
 }

@@ -29,25 +29,25 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Department> create(Department department) {
+    public ResponseEntity<Department> create(@RequestBody Department department) {
         return new ResponseEntity<>(service.add(department), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Department> update(Department department) {
+    public ResponseEntity<Department> update(@RequestBody Department department) {
         return new ResponseEntity<>(service.update(department), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Department with id: '" + id + "' was deleted", HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         service.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("All departments deleted", HttpStatus.OK);
     }
 
 }

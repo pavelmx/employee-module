@@ -1,5 +1,6 @@
 package com.innowise.employeemodule.service;
 
+import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.entity.PersonalInfo;
 import com.innowise.employeemodule.repository.HiringEmployeeInfoRepository;
@@ -7,6 +8,8 @@ import com.innowise.employeemodule.repository.PersonalInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,7 +21,7 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
     @Override
     public HiringEmployeeInfo getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new RuntimeException("HiringEmployeeInfo with id: '" + id + "' not found"));
+                .orElseThrow( () -> new EntityNotFoundException("HiringEmployeeInfo with id: '" + id + "' not found"));
     }
 
     @Override
@@ -44,5 +47,13 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
     @Override
     public void deleteAll() {
         repository.deleteAll();
+    }
+
+    @Override
+    public HiringEmployeeInfo setDismissEmployee(Employee employee) {
+        HiringEmployeeInfo hiringEmployeeInfo = repository.findByEmployee_Id(employee.getId())
+                .orElseThrow( () -> new EntityNotFoundException("HiringEmployeeInfo by employee's id: '" + employee.getId() + "' not found"));
+        hiringEmployeeInfo.setDateOfDismissal(LocalDate.now());
+        return repository.save(hiringEmployeeInfo);
     }
 }

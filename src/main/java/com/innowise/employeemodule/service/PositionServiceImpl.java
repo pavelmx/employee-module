@@ -7,6 +7,7 @@ import com.innowise.employeemodule.repository.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Position getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new RuntimeException("Position with id: '" + id + "' not found"));
+                .orElseThrow( () -> new EntityNotFoundException("Position with id: '" + id + "' not found"));
     }
 
     @Override
@@ -28,6 +29,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position add(Position position) {
+        position.setActive(true);
         return repository.save(position);
     }
 
@@ -44,5 +46,12 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public void deleteAll() {
         repository.deleteAll();
+    }
+
+    @Override
+    public void disable(Long id){
+        Position position = getById(id);
+        position.setActive(false);
+        repository.save(position);
     }
 }

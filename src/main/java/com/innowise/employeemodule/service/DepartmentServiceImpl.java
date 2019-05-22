@@ -5,6 +5,7 @@ import com.innowise.employeemodule.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new RuntimeException("Department with id: '" + id + "' not found"));
+                .orElseThrow( () -> new EntityNotFoundException("Department with id: '" + id + "' not found"));
     }
 
     @Override
