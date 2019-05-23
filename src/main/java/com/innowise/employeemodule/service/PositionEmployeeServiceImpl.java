@@ -41,11 +41,17 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
 
     @Override
     public PositionEmployee update(PositionEmployee positionEmployee) {
+        if(!repository.existsById(positionEmployee.getId())){
+            throw new EntityNotFoundException("PositionEmployee with id: '" + positionEmployee.getId() + "' not found");
+        }
         return repository.save(positionEmployee);
     }
 
     @Override
     public void deleteById(Long id) {
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("PositionEmployee with id: '" + id + "' not found");
+        }
         repository.deleteById(id);
     }
 

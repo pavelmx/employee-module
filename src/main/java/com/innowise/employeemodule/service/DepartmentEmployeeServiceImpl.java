@@ -36,11 +36,17 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public DepartmentEmployee update(DepartmentEmployee departmentEmployee) {
+        if(!repository.existsById(departmentEmployee.getId())){
+            throw new EntityNotFoundException("DepartmentEmployee with id: '" + departmentEmployee.getId() + "' not found");
+        }
         return repository.save(departmentEmployee);
     }
 
     @Override
     public void deleteById(Long id) {
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("DepartmentEmployee with id: '" + id + "' not found");
+        }
         repository.deleteById(id);
     }
 

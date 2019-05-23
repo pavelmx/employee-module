@@ -1,5 +1,7 @@
 package com.innowise.employeemodule.controller;
 
+import com.innowise.employeemodule.config.DTO;
+import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeUpdateDTO;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ public class EmployeeController {
     private EmployeeService service;
 
     @GetMapping("/{id}")
+    @DTO(EmployeeUpdateDTO.class)
     public ResponseEntity<Employee> getById(@PathVariable Long id) {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
@@ -49,11 +52,15 @@ public class EmployeeController {
         return new ResponseEntity<>("All employees deleted", HttpStatus.OK);
     }
 ////////////////////
-    @GetMapping("dismiss/{id}")
+    @GetMapping("dismissal/{id}")
     public ResponseEntity<String> dismissEmployeeById(@PathVariable Long id) {
         service.dismissEmployee(id);
-        return new ResponseEntity<>("Employee with id: '" + id + "' was dismissed success", HttpStatus.OK);
+        return new ResponseEntity<>("Employee with id: '" + id + "' was dismissed", HttpStatus.OK);
     }
 
-    //reset employee
+    @GetMapping("recovery/{id}")
+    public ResponseEntity<String> recoveryEmployee(@PathVariable Long id) {
+        service.recoveryEmployee(id);
+        return new ResponseEntity<>("Employee with id: '" + id + "' was reinstated", HttpStatus.OK);
+    }
 }

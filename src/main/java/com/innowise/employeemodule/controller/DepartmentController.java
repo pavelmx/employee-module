@@ -29,8 +29,8 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Department> create(@RequestBody Department department) {
-        return new ResponseEntity<>(service.add(department), HttpStatus.CREATED);
+    public ResponseEntity<Department> create(@RequestBody Department department, @RequestParam Long manager_id) {
+        return new ResponseEntity<>(service.create(department, manager_id), HttpStatus.CREATED);
     }
 
     @PutMapping

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface HiringEmployeeInfoRepository extends JpaRepository<HiringEmployeeInfo, Long> {
 
-    Optional<HiringEmployeeInfo> findByEmployee_Id(Long id);
+    Optional<HiringEmployeeInfo> findByEmployee_IdAndDateOfDismissalIsNull(Long id);
 }

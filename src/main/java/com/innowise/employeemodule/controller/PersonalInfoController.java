@@ -1,9 +1,10 @@
 package com.innowise.employeemodule.controller;
 
+import com.innowise.employeemodule.config.DTO;
+import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoCreationDTO;
+import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoUpdateDTO;
 import com.innowise.employeemodule.entity.PersonalInfo;
-import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.service.PersonalInfoService;
-import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,18 @@ public class PersonalInfoController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PersonalInfo>> getAll() {
+    public ResponseEntity<List<PersonalInfo>> getAll(){
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
+    @DTO(PersonalInfoCreationDTO.class)
     public ResponseEntity<PersonalInfo> create(@RequestBody PersonalInfo personalInfo) {
         return new ResponseEntity<>(service.add(personalInfo), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @DTO(PersonalInfoUpdateDTO.class)
     public ResponseEntity<PersonalInfo> update(@RequestBody PersonalInfo personalInfo) {
         return new ResponseEntity<>(service.update(personalInfo), HttpStatus.OK);
     }

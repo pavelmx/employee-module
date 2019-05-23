@@ -12,7 +12,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "position")
+@Table(name = "position",
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "name" })})
 public class Position extends AbstractEntity {
 
 

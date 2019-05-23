@@ -70,7 +70,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee createdEmployee = repository.save(employee);
         //write info of hiring
         HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
-        hiringEmployeeInfo.setDateOfDismissal(null);
         hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
         hiringEmployeeInfo.setEmployee(createdEmployee);
         hiringEmployeeInfoService.add(hiringEmployeeInfo);
@@ -94,9 +93,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee update(Employee employee) {
-        if (!repository.existsById(employee.getId())) {
-            throw new EntityNotFoundException("Employee with id: '" + employee.getId() + "' not found");
-        }
         PersonalInfo truePersonalInfo = getById(employee.getId()).getPersonalInfo();
         Long idInfo = truePersonalInfo.getId();
         Long idEmp = employee.getPersonalInfo().getId();
@@ -126,6 +122,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setActive(false);
         repository.save(employee);
         hiringEmployeeInfoService.setDismissEmployee(employee);
+    }
+
+    @Override
+    public void recoveryEmployee(Long id) {
+        Employee employee = getById(id);
+        employee.setActive(true);
+        Employee createdEmployee = repository.save(employee);
+        HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
+        hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
+        hiringEmployeeInfo.setEmployee(createdEmployee);
+        hiringEmployeeInfoService.add(hiringEmployeeInfo);
     }
 
 }

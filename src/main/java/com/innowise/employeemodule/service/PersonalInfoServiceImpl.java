@@ -52,6 +52,9 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 
     @Override
     public void deleteById(Long id) {
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("PersonalInfo with id: '" + id + "' not found");
+        }
         repository.deleteById(id);
     }
 

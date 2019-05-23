@@ -36,11 +36,17 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
 
     @Override
     public HiringEmployeeInfo update(HiringEmployeeInfo hiringEmployeeInfo) {
+        if(!repository.existsById(hiringEmployeeInfo.getId())){
+            throw new EntityNotFoundException("HiringEmployeeInfo with id: '" + hiringEmployeeInfo.getId() + "' not found");
+        }
         return repository.save(hiringEmployeeInfo);
     }
 
     @Override
     public void deleteById(Long id) {
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("HiringEmployeeInfo with id: '" + id + "' not found");
+        }
         repository.deleteById(id);
     }
 
@@ -51,7 +57,7 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
 
     @Override
     public HiringEmployeeInfo setDismissEmployee(Employee employee) {
-        HiringEmployeeInfo hiringEmployeeInfo = repository.findByEmployee_Id(employee.getId())
+        HiringEmployeeInfo hiringEmployeeInfo = repository.findByEmployee_IdAndDateOfDismissalIsNull(employee.getId())
                 .orElseThrow( () -> new EntityNotFoundException("HiringEmployeeInfo by employee's id: '" + employee.getId() + "' not found"));
         hiringEmployeeInfo.setDateOfDismissal(LocalDate.now());
         return repository.save(hiringEmployeeInfo);
