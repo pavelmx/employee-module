@@ -6,4 +6,6 @@ public interface DepartmentEmployeeService extends AbstractService<DepartmentEmp
 
     void changeDepartment(Long newdepartment_id, Long employee_id);
 
+    DepartmentEmployee getByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id);
+
 }

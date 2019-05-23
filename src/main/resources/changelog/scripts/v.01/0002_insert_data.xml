@@ -44,11 +44,20 @@
         </insert>
     </changeSet>
 
+    <changeSet id="insert_to_position_employee" author="oadmin">
+        <insert tableName="position_employee">
+            <column name="id" value="1" />
+            <column name="employee_id" value="1"/>
+            <column name="position_id" value="1"/>
+            <column name="start_date_for_position" value="2019-05-06"/>
+        </insert>
+    </changeSet>
+
     <changeSet id="insert_to_department_employee" author="oadmin">
         <insert tableName="department_employee">
             <column name="id" value="1" />
             <column name="employee_id" value="1"/>
-            <column name="position_id" value="1"/>
+            <column name="position_employee_id" value="1"/>
             <column name="department_id" value="1"/>
             <column name="is_current_department" value="true"/>
             <column name="start_date_in_department" value="2019-05-05"/>

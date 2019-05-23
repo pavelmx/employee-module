@@ -32,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PositionService positionService;
 
+    @Autowired
+    private PositionEmployeeService positionEmployeeService;
+
     @Override
     public Employee getById(Long id) {
         return repository.findById(id)
@@ -71,14 +74,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
         hiringEmployeeInfo.setEmployee(createdEmployee);
         hiringEmployeeInfoService.add(hiringEmployeeInfo);
+        //create position_employee
+        PositionEmployee positionEmployee = new PositionEmployee();
+        positionEmployee.setEmployee(createdEmployee);
+        positionEmployee.setPosition(positionService.getById(position_id));
+        positionEmployee.setStartDateForPosition(LocalDate.now());
+        PositionEmployee createdPositionEmployee = positionEmployeeService.add(positionEmployee);
         //create department_employee
         DepartmentEmployee departmentEmployee = new DepartmentEmployee();
         departmentEmployee.setCurrentDepartment(true);
         departmentEmployee.setDepartment(departmentService.getById(department_id));
         departmentEmployee.setEmployee(createdEmployee);
-        departmentEmployee.setPosition(positionService.getById(position_id));
+        departmentEmployee.setPositionEmployee(createdPositionEmployee);
         departmentEmployee.setStartDateInDepartment(LocalDate.now());
         departmentEmployeeService.add(departmentEmployee);
+
         return createdEmployee;
     }
 

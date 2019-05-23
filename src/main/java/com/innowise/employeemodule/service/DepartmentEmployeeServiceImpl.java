@@ -50,9 +50,15 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     }
 
     @Override
+    public DepartmentEmployee getByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id){
+        DepartmentEmployee departmentEmployee = repository.findByEmployee_IdAndIsCurrentDepartmentTrue(employee_id)
+                .orElseThrow( () -> new EntityNotFoundException("DepartmentEmployee by employee's id: '" + employee_id + "' where IsCurrentDepartment = true not found"));
+        return departmentEmployee;
+    }
+
+    @Override
     public void changeDepartment(Long newdepartment_id, Long employee_id){
-        DepartmentEmployee oldDepartmentEmployee = repository.findByEmployee_IdAndIsCurrentDepartmentTrue(employee_id)
-                .orElseThrow( () -> new EntityNotFoundException("DepartmentEmployee by employee's id: '" + employee_id + "' not found"));
+        DepartmentEmployee oldDepartmentEmployee = getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
         oldDepartmentEmployee.setCurrentDepartment(false);
         oldDepartmentEmployee.setEndDateInDepartment(LocalDate.now());
         update(oldDepartmentEmployee);
@@ -60,8 +66,8 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         newDepartmentEmployee.setStartDateInDepartment(LocalDate.now());
         newDepartmentEmployee.setEmployee(oldDepartmentEmployee.getEmployee());
         newDepartmentEmployee.setCurrentDepartment(true);
-        newDepartmentEmployee.setPosition(oldDepartmentEmployee.getPosition());
+        newDepartmentEmployee.setPositionEmployee(oldDepartmentEmployee.getPositionEmployee());
         newDepartmentEmployee.setDepartment(departmentService.getById(newdepartment_id));
-        update(newDepartmentEmployee);
+        add(newDepartmentEmployee);
     }
 }

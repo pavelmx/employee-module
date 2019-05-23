@@ -13,9 +13,7 @@
             </column>
             <column name="is_active" type="boolean"></column>
             <column name="personal_info_id" type="bigint"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -27,9 +25,7 @@
             </column>
             <column name="name" type="varchar(255)"></column>
             <column name="manager_id" type="bigint"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -40,14 +36,26 @@
                 <constraints primaryKey="true" primaryKeyName="pk_department_employee_id" nullable="false"/>
             </column>
             <column name="employee_id" type="bigint"></column>
-            <column name="position_id" type="bigint"></column>
+            <column name="position_employee_id" type="bigint"></column>
             <column name="department_id" type="bigint"></column>
             <column name="is_current_department" type="boolean"></column>
             <column name="start_date_in_department" type="date"></column>
             <column name="end_date_in_department" type="date"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_position_employee" author="oadmin">
+        <createTable tableName="position_employee">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_position_employee">
+                <constraints primaryKey="true" primaryKeyName="pk_position_employee_id" nullable="false"/>
             </column>
+            <column name="employee_id" type="bigint"></column>
+            <column name="position_id" type="bigint"></column>
+            <column name="start_date_for_position" type="date"></column>
+            <column name="end_date_for_position" type="date"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -60,9 +68,7 @@
             <column name="employee_id" type="bigint"></column>
             <column name="date_of_hiring" type="date"></column>
             <column name="date_of_dismissal" type="date"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -74,9 +80,7 @@
             </column>
             <column name="name" type="varchar(255)"></column>
             <column name="is_active" type="boolean"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -93,9 +97,7 @@
             <column name="skype" type="varchar(255)"></column>
             <column name="phone_number" type="varchar(255)"></column>
             <column name="description" type="varchar(255)"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
@@ -122,8 +124,8 @@
         <addForeignKeyConstraint
                 constraintName="fk_dep_emp_position"
                 baseTableName="department_employee"
-                baseColumnNames="position_id"
-                referencedTableName="position"
+                baseColumnNames="position_employee_id"
+                referencedTableName="position_employee"
                 referencedColumnNames="id"
                 onDelete="SET NULL"
                 onUpdate="CASCADE"/>
@@ -155,6 +157,26 @@
                 onDelete="SET NULL"
                 onUpdate="CASCADE"/>
 
+        <addForeignKeyConstraint
+                constraintName="fk_position_employee_employee"
+                baseTableName="position_employee"
+                baseColumnNames="employee_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_position_employee_position"
+                baseTableName="position_employee"
+                baseColumnNames="position_id"
+                referencedTableName="position"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
     </changeSet>
+
+
 
 </databaseChangeLog>

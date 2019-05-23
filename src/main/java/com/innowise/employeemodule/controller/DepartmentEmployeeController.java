@@ -2,8 +2,10 @@ package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.DepartmentEmployee;
+import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.service.DepartmentEmployeeService;
 import com.innowise.employeemodule.service.DepartmentService;
+import com.innowise.employeemodule.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,12 @@ public class DepartmentEmployeeController {
 
     @Autowired
     private DepartmentEmployeeService service;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentEmployee> getById(@PathVariable("id") Long id) {
@@ -53,7 +61,10 @@ public class DepartmentEmployeeController {
     @GetMapping("/change")
     public ResponseEntity<String> changeDepartment(@RequestParam Long newdepartment_id, @RequestParam Long employee_id){
         service.changeDepartment(newdepartment_id, employee_id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Employee employee = employeeService.getById(employee_id);
+        Department department = departmentService.getById(newdepartment_id);
+        return new ResponseEntity<>("Employee '" + employee.getPersonalInfo().getFirstName() + " "
+                + employee.getPersonalInfo().getLastName() + "' moved to department '" + department.getName() + "'", HttpStatus.OK);
     }
 
 }
