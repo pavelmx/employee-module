@@ -1,0 +1,103 @@
+<div>
+  <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add department</button>
+</div>
+<br>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Manager</th>
+      <th scope="col">Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let department of list">
+      <th>{{department.id}}</th>
+      <td>{{department.name}}</td>
+      <td *ngIf="department.manager != null">{{department.manager.personalInfo.firstName}}
+        {{department.manager.personalInfo.lastName}}</td>
+      <td *ngIf="department.manager == null">not assigned</td>
+      <td>
+        <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#editModal"
+          (click)="setEditDepartment(department)">Edit</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- add modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #f="ngForm">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name"
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <label for="manager_id">Manager</label>
+            <select required class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel">
+               
+              <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
+                {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
+          (click)="add(f)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Edit Department</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="formedit" #fedit="ngForm">
+          <div class="form-group">
+            <input type="text" class="form-control" disabled placeholder="Id" name="id" [(ngModel)]="formedit.id"
+              #id="ngModel">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="formedit.name"
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <label for="manager_id">Manager</label>
+            <select required class="custom-select" name="manager_id" [(ngModel)]="formedit.manager_id" #manager_id="ngModel">
+              
+              <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
+                {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" data-dismiss="modal"
+          (click)="edit(fedit)">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

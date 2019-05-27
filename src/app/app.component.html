@@ -1,3 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" routerLink="employee-list">Employee list</a>
+            <a class="nav-item nav-link" routerLink="department-list">Department list</a>
+            <a class="nav-item nav-link" routerLink="position-list">Position list</a>
+            <a class="nav-item nav-link" routerLink="department-employee-list">Employee info(dep_emp)</a>
+            <a class="nav-item nav-link" routerLink="hiring-info-list">Hiring info</a>
+        </div>
+    </div>
+</nav>
 
-
-<router-outlet></router-outlet>
+<div class="container mt-5">
+    <router-outlet></router-outlet>
+</div>

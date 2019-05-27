@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrivateComponent } from './private.component';
+import { HiringInfoListComponent } from './hiring-info-list.component';
 
-describe('PrivateComponent', () => {
-  let component: PrivateComponent;
-  let fixture: ComponentFixture<PrivateComponent>;
+describe('HiringInfoListComponent', () => {
+  let component: HiringInfoListComponent;
+  let fixture: ComponentFixture<HiringInfoListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrivateComponent ]
+      declarations: [ HiringInfoListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivateComponent);
+    fixture = TestBed.createComponent(HiringInfoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

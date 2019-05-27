@@ -1,29 +1,44 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeService } from './services/home.service';
+import { EmployeeService } from './services/employee.service';
 import { CookieService } from 'ngx-cookie-service';
-import { CarsComponent } from './cars/cars.component';
-import { PrivateComponent } from './private/private.component';
-import { HomeComponent } from './home/home.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule, MatTableModule} from '@angular/material';
+import { DepartmentListComponent } from './department-list/department-list.component';
+import { DepartmentService } from './services/department.service';
+import { PositionListComponent } from './position-list/position-list.component';
+import { HiringInfoListComponent } from './hiring-info-list/hiring-info-list.component';
+import { DepartmentEmployeeListComponent } from './department-employee-list/department-employee-list.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarsComponent,
-    PrivateComponent,
-    HomeComponent,
+    EmployeeListComponent,
+    DepartmentListComponent,
+    PositionListComponent,
+    HiringInfoListComponent,
+    DepartmentEmployeeListComponent,
   ],
   imports: [
+    
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule, MatCheckboxModule, MatTableModule
   ],
-  providers: [HomeService,CookieService],
+  providers: [
+    EmployeeService,
+    CookieService,
+    DepartmentService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

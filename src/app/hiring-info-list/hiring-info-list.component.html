@@ -1,0 +1,20 @@
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Employee</th>    
+        <th scope="col">Date of hiring</th>
+        <th scope="col">Date of dismissal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hiring of list">
+        <th>{{hiring.id}}</th>
+        <td>{{hiring.employee.personalInfo.firstName}} {{hiring.employee.personalInfo.lastName}}</td>
+        <td>{{hiring.dateOfHiring}}</td>
+        <td>{{hiring.dateOfDismissal}}</td>
+        
+      </tr>
+  
+    </tbody>
+  </table>

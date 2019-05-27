@@ -1,0 +1,29 @@
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Employee</th>  
+        <th scope="col">Position</th> 
+        <th scope="col">Start date for position</th>
+        <th scope="col">End date for position</th>
+        <th scope="col">Department</th> 
+        <th scope="col">Start date in department</th>
+        <th scope="col">End date in department</th>
+        <th scope="col">Current department</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dep_emp of list">
+        <th>{{dep_emp.id}}</th>
+        <td>{{dep_emp.employee.personalInfo.firstName}} {{dep_emp.employee.personalInfo.lastName}}</td>
+        <td>{{dep_emp.positionEmployee.position.name}}</td>
+        <td>{{dep_emp.positionEmployee.startDateForPosition}}</td>
+        <td>{{dep_emp.positionEmployee.endDateForPosition}}</td>
+        <td>{{dep_emp.department.name}}</td>
+        <td>{{dep_emp.startDateInDepartment}}</td>
+        <td>{{dep_emp.endDateInDepartment}}</td>
+        <td>{{dep_emp.currentDepartment}}</td>
+      </tr>
+  
+    </tbody>
+  </table>
