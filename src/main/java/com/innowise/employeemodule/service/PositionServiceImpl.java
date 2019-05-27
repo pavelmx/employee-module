@@ -20,7 +20,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Position getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("Position with id: '" + id + "' not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Position with id: '" + id + "' not found"));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position add(Position position) {
-        if(repository.existsByName(position.getName())){
+        if (repository.existsByName(position.getName())) {
             throw new EntityExistsException("Position with name: '" + position.getName() + "' already exists");
         }
         position.setActive(true);
@@ -39,10 +39,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position update(Position position) {
-        if(!repository.existsByName(position.getName())){
-            throw new EntityNotFoundException("Position with name: '" + position.getName() + "' not found");
-        }
-        if(!repository.existsById(position.getId())){
+        if (!repository.existsById(position.getId())) {
             throw new EntityNotFoundException("Position with id: '" + position.getId() + "' not found");
         }
         return repository.save(position);
@@ -50,7 +47,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public void deleteById(Long id) {
-        if(!repository.existsById(id)){
+        if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Position with id: '" + id + "' not found");
         }
         repository.deleteById(id);
@@ -62,9 +59,29 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public void disable(Long id){
+    public void disable(Long id) {
         Position position = getById(id);
-        position.setActive(false);
-        repository.save(position);
+        if (position.isActive() == true) {
+            position.setActive(false);
+            repository.save(position);
+        } else {
+            throw new RuntimeException("Position is disable now");
+        }
+    }
+
+    @Override
+    public void enable(Long id) {
+        Position position = getById(id);
+        if (position.isActive() == false) {
+            position.setActive(true);
+            repository.save(position);
+        } else {
+            throw new RuntimeException("Position is enable now");
+        }
+    }
+
+    @Override
+    public List<Position> getEnableAll() {
+        return repository.findByIsActiveTrue();
     }
 }

@@ -59,4 +59,15 @@ public class PositionController {
         return new ResponseEntity<>("Position with id: '" + id + "' disabled", HttpStatus.OK);
     }
 
+    @GetMapping("enable/{id}")
+    public ResponseEntity<String> enablePositionById(@PathVariable("id") Long id) {
+        service.enable(id);
+        return new ResponseEntity<>("Position with id: '" + id + "' enabled", HttpStatus.OK);
+    }
+
+    @GetMapping("enable/all")
+    public ResponseEntity<List<Position>> getEnableAll() {
+        return new ResponseEntity<>(service.getEnableAll(), HttpStatus.OK);
+    }
+
 }

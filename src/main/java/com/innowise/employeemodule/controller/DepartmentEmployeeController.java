@@ -3,6 +3,7 @@ package com.innowise.employeemodule.controller;
 import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.DepartmentEmployee;
 import com.innowise.employeemodule.entity.Employee;
+import com.innowise.employeemodule.entity.PositionEmployee;
 import com.innowise.employeemodule.service.DepartmentEmployeeService;
 import com.innowise.employeemodule.service.DepartmentService;
 import com.innowise.employeemodule.service.EmployeeService;
@@ -56,6 +57,16 @@ public class DepartmentEmployeeController {
     public ResponseEntity<String> deleteAll() {
         service.deleteAll();
         return new ResponseEntity<>("All DepartmentEmployee's deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("all/{employee_id}")
+    public ResponseEntity<List<DepartmentEmployee>> getAllByEmployeeId(@PathVariable Long employee_id){
+        return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+    }
+
+    @GetMapping("current/{employee_id}")
+    public ResponseEntity<DepartmentEmployee> getByEmployeeIdAndIsCurrentDepartmentTrue(@PathVariable Long employee_id){
+        return new ResponseEntity<>(service.getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id), HttpStatus.OK);
     }
 
     @GetMapping("/change")

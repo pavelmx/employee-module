@@ -2,6 +2,8 @@ package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.config.DTO;
 import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoCreationDTO;
+import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoCreationInputDTO;
+import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoGetDTO;
 import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoUpdateDTO;
 import com.innowise.employeemodule.entity.PersonalInfo;
 import com.innowise.employeemodule.service.PersonalInfoService;
@@ -21,18 +23,20 @@ public class PersonalInfoController {
 
     //////////////////////
     @GetMapping("/{id}")
+    @DTO(PersonalInfoGetDTO.class)
     public ResponseEntity<PersonalInfo> getById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all")
+    @DTO(PersonalInfoGetDTO.class)
     public ResponseEntity<List<PersonalInfo>> getAll(){
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
     @DTO(PersonalInfoCreationDTO.class)
-    public ResponseEntity<PersonalInfo> create(@RequestBody PersonalInfo personalInfo) {
+    public ResponseEntity<PersonalInfo> create(@DTO(PersonalInfoCreationInputDTO.class) PersonalInfo personalInfo) {
         return new ResponseEntity<>(service.add(personalInfo), HttpStatus.CREATED);
     }
 

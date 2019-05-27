@@ -1,6 +1,7 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.DepartmentEmployee;
+import com.innowise.employeemodule.entity.PositionEmployee;
 import com.innowise.employeemodule.repository.DepartmentEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,12 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     @Override
     public void deleteAll() {
         repository.deleteAll();
+    }
+
+    @Override
+    public List<DepartmentEmployee> getAllByEmployeeId(Long employee_id){
+        List<DepartmentEmployee> departmentEmployeeList = repository.findByEmployee_Id(employee_id);
+        return departmentEmployeeList;
     }
 
     @Override

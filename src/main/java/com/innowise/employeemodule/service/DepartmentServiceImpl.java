@@ -42,9 +42,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(!repository.existsById(department.getId())){
             throw new EntityNotFoundException("Department with id: '" + department.getId() + "' not found");
         }
-        if(!repository.existsByName(department.getName())){
-            throw new EntityNotFoundException("Department with name: '" + department.getName() + "' not found");
-        }
         return repository.save(department);
     }
 
@@ -63,7 +60,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department create(Department department, Long manager_id) {
-        department.setManager(employeeService.getById(manager_id));
+        if(manager_id == null){
+            department.setManager(null);
+        }else{
+            department.setManager(employeeService.getById(manager_id));
+        }
         return add(department);
     }
 }

@@ -59,7 +59,7 @@ public class EmployeeController {
     }
 
     @GetMapping("recovery/{id}")
-    public ResponseEntity<String> recoveryEmployee(@PathVariable Long id) {
+    public ResponseEntity<String> recoveryEmployeeById(@PathVariable Long id) {
         service.recoveryEmployee(id);
         return new ResponseEntity<>("Employee with id: '" + id + "' was reinstated", HttpStatus.OK);
     }

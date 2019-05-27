@@ -58,6 +58,16 @@ public class PositionEmployeeController {
         return new ResponseEntity<>("All PositionEmployee's deleted", HttpStatus.OK);
     }
 
+    @GetMapping("all/{employee_id}")
+    public ResponseEntity<List<PositionEmployee>> getAllByEmployeeId(@PathVariable Long employee_id){
+        return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+    }
+
+    @GetMapping("current/{employee_id}")
+    public ResponseEntity<PositionEmployee> getByEmployeeIdAndEndDateForPositionIsNull(@PathVariable Long employee_id){
+        return new ResponseEntity<>(service.getByEmployeeIdAndEndDateForPositionIsNull(employee_id), HttpStatus.OK);
+    }
+
     @GetMapping("change")
     public ResponseEntity<String> changePosition(@RequestParam Long employee_id, @RequestParam Long newposition_id) {
         service.changePosition(employee_id, newposition_id);

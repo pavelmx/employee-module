@@ -61,6 +61,12 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
     }
 
     @Override
+    public List<PositionEmployee> getAllByEmployeeId(Long employee_id){
+        List<PositionEmployee> positionEmployeeList = repository.findByEmployee_Id(employee_id);
+        return positionEmployeeList;
+    }
+
+    @Override
     public PositionEmployee getByEmployeeIdAndEndDateForPositionIsNull(Long employee_id){
         PositionEmployee positionEmployee = repository.findByEmployee_IdAndEndDateForPositionIsNull(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("PositionEmployee by employee's id: '" + employee_id + "' where EndDateForPosition = null not found"));

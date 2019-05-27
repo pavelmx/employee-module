@@ -3,12 +3,11 @@ package com.innowise.employeemodule.dto.PersonalInfoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class PersonalInfoCreationDTO {
+public class PersonalInfoCreationInputDTO {
 
 
     @NotNull
@@ -26,9 +25,9 @@ public class PersonalInfoCreationDTO {
     @NotNull
     private String phoneNumber;
 
-    /*@NotNull
-    private String skype;*/
-
     @NotNull
-    private String description;
+    private String skype;
+
+    /*@NotNull
+    private String description;*/
 }

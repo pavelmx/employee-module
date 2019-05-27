@@ -38,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("Employee with id: '" + id + "' not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Employee with id: '" + id + "' not found"));
     }
 
     @Override
@@ -54,6 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee create(Employee employee, Long position_id, Long department_id) {
+        Department department = departmentService.getById(department_id);
+        Position position = positionService.getById(position_id);
         //create employee's info
         PersonalInfo personalInfo = new PersonalInfo();
         personalInfo.setAdress(employee.getPersonalInfo().getAdress());
@@ -76,13 +78,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         //create position_employee
         PositionEmployee positionEmployee = new PositionEmployee();
         positionEmployee.setEmployee(createdEmployee);
-        positionEmployee.setPosition(positionService.getById(position_id));
+        positionEmployee.setPosition(position);
         positionEmployee.setStartDateForPosition(LocalDate.now());
         PositionEmployee createdPositionEmployee = positionEmployeeService.add(positionEmployee);
         //create department_employee
         DepartmentEmployee departmentEmployee = new DepartmentEmployee();
         departmentEmployee.setCurrentDepartment(true);
-        departmentEmployee.setDepartment(departmentService.getById(department_id));
+        departmentEmployee.setDepartment(department);
         departmentEmployee.setEmployee(createdEmployee);
         departmentEmployee.setPositionEmployee(createdPositionEmployee);
         departmentEmployee.setStartDateInDepartment(LocalDate.now());
@@ -96,7 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         PersonalInfo truePersonalInfo = getById(employee.getId()).getPersonalInfo();
         Long idInfo = truePersonalInfo.getId();
         Long idEmp = employee.getPersonalInfo().getId();
-        if(!idEmp.equals(idInfo)){
+        if (!idEmp.equals(idInfo)) {
             throw new RuntimeException("Incorrect personal information for employee with id: '" + employee.getId() + "'");
         }
         personalInfoService.update(employee.getPersonalInfo());
@@ -119,20 +121,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void dismissEmployee(Long id) {
         Employee employee = getById(id);
-        employee.setActive(false);
-        repository.save(employee);
-        hiringEmployeeInfoService.setDismissEmployee(employee);
+        if (employee.isActive() == true) {
+            employee.setActive(false);
+            repository.save(employee);
+            hiringEmployeeInfoService.setDismissEmployee(employee);
+        } else {
+            throw new RuntimeException("Employee is unactive now");
+        }
     }
 
     @Override
     public void recoveryEmployee(Long id) {
         Employee employee = getById(id);
-        employee.setActive(true);
-        Employee createdEmployee = repository.save(employee);
-        HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
-        hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
-        hiringEmployeeInfo.setEmployee(createdEmployee);
-        hiringEmployeeInfoService.add(hiringEmployeeInfo);
+        if (employee.isActive() == false) {
+            employee.setActive(true);
+            Employee createdEmployee = repository.save(employee);
+            HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
+            hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
+            hiringEmployeeInfo.setEmployee(createdEmployee);
+            hiringEmployeeInfoService.add(hiringEmployeeInfo);
+        } else {
+            throw new RuntimeException("Employee is active now");
+        }
     }
 
 }
