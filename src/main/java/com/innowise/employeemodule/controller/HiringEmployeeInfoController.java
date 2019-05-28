@@ -5,6 +5,7 @@ import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.service.HiringEmployeeInfoService;
 import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,12 @@ public class HiringEmployeeInfoController {
     @GetMapping("/all")
     public ResponseEntity<List<HiringEmployeeInfo>> getAll() {
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-page")
+    public ResponseEntity<Page<HiringEmployeeInfo>> getAllPage(@RequestParam int size, @RequestParam int page,
+                                                               @RequestParam String column, @RequestParam String order) {
+        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
     }
 
     @PostMapping

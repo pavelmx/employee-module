@@ -6,6 +6,10 @@ import com.innowise.employeemodule.entity.PersonalInfo;
 import com.innowise.employeemodule.repository.HiringEmployeeInfoRepository;
 import com.innowise.employeemodule.repository.PersonalInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -61,5 +65,16 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
                 .orElseThrow( () -> new EntityNotFoundException("HiringEmployeeInfo by employee's id: '" + employee.getId() + "' not found"));
         hiringEmployeeInfo.setDateOfDismissal(LocalDate.now());
         return repository.save(hiringEmployeeInfo);
+    }
+
+    @Override
+    public Page<HiringEmployeeInfo> getAllPage(int size, int page, String column, String order) {
+        Pageable pageable;
+        if(order.equals("")){
+            pageable = PageRequest.of(page, size);
+        }else{
+            pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        }
+        return repository.findAll(pageable);
     }
 }

@@ -2,9 +2,11 @@ package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.config.DTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeUpdateDTO;
+import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,12 @@ public class EmployeeController {
     public ResponseEntity<String> deleteAll() {
         service.deleteAll();
         return new ResponseEntity<>("All employees deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/all-page")
+    public ResponseEntity<Page<Employee>> getAllPage(@RequestParam int size, @RequestParam int page,
+                                                       @RequestParam String column, @RequestParam String order) {
+        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
     }
 ////////////////////
     @GetMapping("dismissal/{id}")

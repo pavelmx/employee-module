@@ -5,6 +5,7 @@ import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.service.DepartmentService;
 import com.innowise.employeemodule.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,12 @@ public class DepartmentController {
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/all-page")
+    public ResponseEntity<Page<Department>> getAllPage(@RequestParam int size, @RequestParam int page,
+                                                       @RequestParam String column, @RequestParam String order) {
+        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Department> create(@RequestBody Department department, @RequestParam Long manager_id) {
         return new ResponseEntity<>(service.create(department, manager_id), HttpStatus.CREATED);
@@ -49,5 +56,7 @@ public class DepartmentController {
         service.deleteAll();
         return new ResponseEntity<>("All departments deleted", HttpStatus.OK);
     }
+
+
 
 }

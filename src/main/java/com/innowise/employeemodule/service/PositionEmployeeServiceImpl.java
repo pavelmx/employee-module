@@ -1,10 +1,15 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.DepartmentEmployee;
+import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.PositionEmployee;
 import com.innowise.employeemodule.repository.PositionEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -86,5 +91,16 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
         DepartmentEmployee departmentEmployee = departmentEmployeeService.getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
         departmentEmployee.setPositionEmployee(newPositionEmployee);
         departmentEmployeeService.update(departmentEmployee);
+    }
+
+    @Override
+    public Page<PositionEmployee> getAllPage(int size, int page, String column, String order) {
+        Pageable pageable;
+        if(order.equals("")){
+            pageable = PageRequest.of(page, size);
+        }else{
+            pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        }
+        return repository.findAll(pageable);
     }
 }

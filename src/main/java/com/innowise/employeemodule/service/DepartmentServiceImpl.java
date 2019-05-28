@@ -3,6 +3,10 @@ package com.innowise.employeemodule.service;
 import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -66,5 +70,16 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setManager(employeeService.getById(manager_id));
         }
         return add(department);
+    }
+
+    @Override
+    public Page<Department> getAllPage(int size, int page, String column, String order) {
+        Pageable pageable;
+        if(order.equals("")){
+            pageable = PageRequest.of(page, size);
+        }else{
+            pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        }
+        return repository.findAll(pageable);
     }
 }

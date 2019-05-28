@@ -4,6 +4,10 @@ import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.innowise.employeemodule.repository.PersonalInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -144,5 +148,17 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RuntimeException("Employee is active now");
         }
     }
+
+    @Override
+    public Page<Employee> getAllPage(int size, int page, String column, String order) {
+        Pageable pageable;
+        if(order.equals("")){
+            pageable = PageRequest.of(page, size);
+        }else{
+            pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        }
+        return repository.findAll(pageable);
+    }
+
 
 }

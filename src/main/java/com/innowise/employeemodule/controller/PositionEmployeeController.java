@@ -7,6 +7,7 @@ import com.innowise.employeemodule.service.EmployeeService;
 import com.innowise.employeemodule.service.PositionEmployeeService;
 import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,12 @@ public class PositionEmployeeController {
     public ResponseEntity<String> deleteAll() {
         service.deleteAll();
         return new ResponseEntity<>("All PositionEmployee's deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/all-page")
+    public ResponseEntity<Page<PositionEmployee>> getAllPage(@RequestParam int size, @RequestParam int page,
+                                                       @RequestParam String column, @RequestParam String order) {
+        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
     }
 
     @GetMapping("all/{employee_id}")
