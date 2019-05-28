@@ -5,6 +5,7 @@ import { DepartmentListComponent } from './department-list/department-list.compo
 import { PositionListComponent } from './position-list/position-list.component';
 import { HiringInfoListComponent } from './hiring-info-list/hiring-info-list.component';
 import { DepartmentEmployeeListComponent } from './department-employee-list/department-employee-list.component';
+import { PositionEmployeeListComponent } from './position-employee-list/position-employee-list.component';
 
 
 
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'position-list',    
     component: PositionListComponent
+  },
+  {
+    path: 'position-employee-list',    
+    component: PositionEmployeeListComponent
   },
   {
     path: 'department-employee-list',    

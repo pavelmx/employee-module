@@ -1,10 +1,26 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Employee</th>    
-        <th scope="col">Date of hiring</th>
-        <th scope="col">Date of dismissal</th>
+        <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+            <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+      </span>
+        </th>
+        <th scope="col" class="sortable" sortable="employee" (sort)="onSort($event)">Employee
+            <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='employee', 'caret-up':order=='asc' && column=='employee'}">
+      </span>
+        </th>    
+        <th scope="col" class="sortable" sortable="dateOfHiring" (sort)="onSort($event)">Date of hiring
+            <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='dateOfHiring', 'caret-up':order=='asc' && column=='dateOfHiring'}">
+      </span>
+        </th>
+        <th scope="col" class="sortable" sortable="dateOfDismissal" (sort)="onSort($event)">Date of dismissal
+            <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='dateOfDismissal', 'caret-up':order=='asc' && column=='dateOfDismissal'}">
+      </span>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -18,3 +34,15 @@
   
     </tbody>
   </table>
+
+  <div class="d-flex justify-content-between ">
+      <ngb-pagination
+      (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+      [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+      </ngb-pagination>
+      <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
+          <option [ngValue]="5">5 items per page</option>
+          <option [ngValue]="15">15 items per page</option>
+          <option [ngValue]="30">30 items per page</option>
+        </select>
+    </div>

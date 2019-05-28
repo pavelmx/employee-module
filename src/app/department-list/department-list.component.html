@@ -2,18 +2,31 @@
   <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add department</button>
 </div>
 <br>
+
 <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Manager</th>
-      <th scope="col">Operations</th>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+    </span>
+      </th>
+      <th scope="col" class="sortable" sortable="name" (sort)="onSort($event)">Name
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='name', 'caret-up':order=='asc' && column=='name'}">
+    </span>
+      </th>
+      <th scope="col" class="sortable" sortable="manager" (sort)="onSort($event)">Manager
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='manager', 'caret-up':order=='asc' && column=='manager'}">
+    </span>
+      </th>
+      <th scope="col" >Operations</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let department of list">
-      <th>{{department.id}}</th>
+      <th>{{department.id}}</th>     
       <td>{{department.name}}</td>
       <td *ngIf="department.manager != null">{{department.manager.personalInfo.firstName}}
         {{department.manager.personalInfo.lastName}}</td>
@@ -26,6 +39,18 @@
   </tbody>
 </table>
 
+<div class="d-flex justify-content-between ">
+    <ngb-pagination
+    (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+    </ngb-pagination>
+    <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="15">15 items per page</option>
+        <option [ngValue]="30">30 items per page</option>
+      </select>
+  </div>
+
 <!-- add modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
@@ -33,20 +58,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form #f="ngForm">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name"
-              #name="ngModel">
+            <input type="text" required class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name" #name="ngModel"
+               [ngClass]="{'is-valid':name.valid && name.touched,'is-invalid':name.invalid && name.touched}" >
           </div>
           <div class="form-group">
             <label for="manager_id">Manager</label>
-            <select required class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel">
-               
+            <select required class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel"
+            [ngClass]="{'is-valid':manager_id.valid && manager_id.touched,'is-invalid':manager_id.invalid && manager_id.touched}" >               
               <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
@@ -54,7 +79,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
         <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
           (click)="add(f)">Save</button>
       </div>
@@ -80,14 +105,14 @@
               #id="ngModel">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="formedit.name"
-              #name="ngModel">
+            <input type="text" required class="form-control" placeholder="Name" name="name2" [(ngModel)]="formedit.name"
+              #name2="ngModel" [ngClass]="{'is-valid':name2.valid,'is-invalid':name2.invalid }" >
           </div>
           <div class="form-group">
             <label for="manager_id">Manager</label>
-            <select required class="custom-select" name="manager_id" [(ngModel)]="formedit.manager_id" #manager_id="ngModel">
-              
-              <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
+            <select required class="custom-select" name="manager_id2" [(ngModel)]="formedit.manager_id" #manager_id2="ngModel"
+            [ngClass]="{'is-valid':manager_id2.valid ,'is-invalid':manager_id2.invalid }">              
+              <option *ngFor="let employee of employeeList"  [ngValue]="employee.id">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
           </div>

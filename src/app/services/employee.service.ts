@@ -10,6 +10,7 @@ import { DepartmentEmployee } from '../models/department-employee.model';
 
 export class EmployeeService {
   private getAllUrl = 'http://localhost:8087/employee/all';
+  private getAllPageUrl = 'http://localhost:8087/employee/all-page';
   private getOneUrl = 'http://localhost:8087/employee/';
   private addEditUrl = 'http://localhost:8087/employee';
   private dismissUrl = 'http://localhost:8087/employee/dismissal/';
@@ -23,6 +24,11 @@ export class EmployeeService {
 
   getList() {
     return this.http.get<Employee[]>(this.getAllUrl);
+  }
+
+  getPageableList(page: number, size: number, column: string, order: string) {
+    return this.http.get<Employee[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order);
   }
 
   getOne(id: any) {

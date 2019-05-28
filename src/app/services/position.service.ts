@@ -13,11 +13,17 @@ export class PositionService {
   private addEditUrl = 'http://localhost:8087/position';
   private disableUrl = 'http://localhost:8087/position/disable/';
   private enableUrl = 'http://localhost:8087/position/enable/';
+  private getAllPageUrl = 'http://localhost:8087/position/all-page';
 
   constructor(private http: HttpClient) { }
 
   getList() {
     return this.http.get<Position[]>(this.getAllUrl);
+  }
+
+  getPageableList(page: number, size: number, column: string, order: string) {
+    return this.http.get<Position[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order);
   }
 
   getEnableList() {

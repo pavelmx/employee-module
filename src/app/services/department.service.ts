@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DepartmentService {
   private getAllUrl = 'http://localhost:8087/department/all';
+  private getAllPageUrl = 'http://localhost:8087/department/all-page';
   private getOneUrl = 'http://localhost:8087/department/';
   private addEditUrl = 'http://localhost:8087/department';
   
@@ -14,6 +15,11 @@ export class DepartmentService {
 
   getList() {
     return this.http.get<Department[]>(this.getAllUrl);
+  }
+
+  getPageableList(page: number, size: number, column: string, order: string) {
+    return this.http.get<Department[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order);
   }
 
   getOne(id: number) {

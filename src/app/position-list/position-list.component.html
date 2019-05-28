@@ -5,10 +5,22 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Active</th>
-      <th scope="col">Operations</th>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+          <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+      </span>
+        </th>
+      <th scope="col" class="sortable" sortable="name" (sort)="onSort($event)">Name
+          <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='name', 'caret-up':order=='asc' && column=='name'}">
+      </span>
+        </th>
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Active
+          <span class="caret-blank"
+            [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+      </span>
+        </th>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Operations</th>
     </tr>
   </thead>
   <tbody>
@@ -25,6 +37,18 @@
   </tbody>
 </table>
 
+<div class="d-flex justify-content-between ">
+    <ngb-pagination
+    (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+    </ngb-pagination>
+    <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="15">15 items per page</option>
+        <option [ngValue]="30">30 items per page</option>
+      </select>
+  </div>
+
 <!-- add modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
@@ -32,20 +56,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form #f="ngForm">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name"
-              #name="ngModel">
+            <input required type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name"
+              #name="ngModel" [ngClass]="{'is-valid':name.valid && name.touched,'is-invalid':name.invalid && name.touched}">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
         <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
           (click)="add(f)">Save</button>
       </div>
@@ -71,8 +95,8 @@
               #id="ngModel">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="formedit.name"
-              #name="ngModel">
+            <input type="text" required class="form-control" placeholder="Name" name="name2" [(ngModel)]="formedit.name"
+              #name2="ngModel" [ngClass]="{'is-valid':name2.valid,'is-invalid':name2.invalid }" >
           </div>
         </form>
       </div>

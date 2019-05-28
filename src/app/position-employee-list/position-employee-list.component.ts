@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
-import { HiringEmployeeInfo } from '../models/hiring-employee-info.model';
-import { HiringEmployeeInfoService } from '../services/hiring-employee-info.service';
+import { PositionEmployee } from '../models/position-employee.model';
+import { PositionEmployeeService } from '../services/position-employee.service';
 import { NgbdSortableHeader, SortEvent } from '../util/sortable.directive';
 
 @Component({
-  selector: 'app-hiring-info-list',
-  templateUrl: './hiring-info-list.component.html',
-  styleUrls: ['./hiring-info-list.component.css']
+  selector: 'app-position-employee-list',
+  templateUrl: './position-employee-list.component.html',
+  styleUrls: ['./position-employee-list.component.css']
 })
-export class HiringInfoListComponent implements OnInit {
+export class PositionEmployeeListComponent implements OnInit {
 
-  list: HiringEmployeeInfo[];
+  list: PositionEmployee[];
   page: number = 0;
   size: number = 5;
   column: string = 'id';
@@ -23,15 +23,15 @@ export class HiringInfoListComponent implements OnInit {
 
 
   constructor(
-    private hiringService: HiringEmployeeInfoService
+    private positionEmployeeService: PositionEmployeeService
   ) { }
 
   ngOnInit() {
-    this.initHiringList();
+    this.initPositionEmployeeList();
   }
 
-  initHiringList() {
-    this.hiringService.getPageableList(this.page, this.size, this.column, this.order)
+  initPositionEmployeeList() {
+    this.positionEmployeeService.getPageableList(this.page, this.size, this.column, this.order)
       .subscribe(
         response => {
           this.list = response['content']; 
@@ -46,15 +46,15 @@ export class HiringInfoListComponent implements OnInit {
   }
 
   onPageChange(pageNumber){   
-  
+    
       this.page = pageNumber - 1;
     
-    this.initHiringList();
+    this.initPositionEmployeeList();
   }
 
   onSizeChange(){
     this.page = 0;   
-    this.initHiringList();
+    this.initPositionEmployeeList();
   }
  
   onSort({column, direction}: SortEvent) {
@@ -68,6 +68,6 @@ export class HiringInfoListComponent implements OnInit {
     this.order = direction;
     console.log(column)
     console.log(direction)
-    this.initHiringList();
+    this.initPositionEmployeeList();
   }
 }

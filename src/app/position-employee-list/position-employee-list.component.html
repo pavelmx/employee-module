@@ -1,0 +1,49 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"class="sortable" sortable="id" (sort)="onSort($event)">Id
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+    </span>
+      </th>
+      <th scope="col"class="sortable" sortable="employee" (sort)="onSort($event)">Employee
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='employee', 'caret-up':order=='asc' && column=='employee'}">
+    </span></th>  
+      <th scope="col"class="sortable" sortable="position" (sort)="onSort($event)">Position
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='position', 'caret-up':order=='asc' && column=='position'}">
+    </span></th> 
+      <th scope="col"class="sortable" sortable="startDateForPosition" (sort)="onSort($event)">Start date for position
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='startDateForPosition', 'caret-up':order=='asc' && column=='startDateForPosition'}">
+    </span></th>
+      <th scope="col"class="sortable" sortable="endDateForPosition" (sort)="onSort($event)">End date for position
+          <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='iendDateForPositiond', 'caret-up':order=='asc' && column=='endDateForPosition'}">
+    </span></th>      
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let pos_emp of list">
+      <th>{{pos_emp.id}}</th>
+      <td>{{pos_emp.employee.personalInfo.firstName}} {{pos_emp.employee.personalInfo.lastName}}</td>
+      <td>{{pos_emp.position.name}}</td>
+      <td>{{pos_emp.startDateForPosition}}</td>
+      <td>{{pos_emp.endDateForPosition}}</td>      
+    </tr>
+
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between ">
+    <ngb-pagination
+    (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+    </ngb-pagination>
+    <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="15">15 items per page</option>
+        <option [ngValue]="30">30 items per page</option>
+      </select>
+  </div>

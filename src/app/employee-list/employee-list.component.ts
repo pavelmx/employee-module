@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { EmployeeService } from '../services/employee.service';
 import { Employee } from '../models/employee.model';
 import { PersonalInfo } from '../models/personal-info.model';
@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import { Position } from '../models/position.model';
 import { PositionEmployee } from '../models/position-employee.model';
 import { DepartmentEmployee } from '../models/department-employee.model';
+import { SortEvent, NgbdSortableHeader } from '../util/sortable.directive';
 
 @Component({
   selector: 'app-employee-list',
@@ -28,7 +29,15 @@ export class EmployeeListComponent implements OnInit {
   formedit: any = {};
   formchange: any = {};
   personalInfo: any = {};
-  
+  page: number = 0;
+  size: number = 5;
+  column: string = 'id';
+  order: string = '';
+  length: number;
+  lastPage: number;
+
+
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
 
   constructor(
@@ -43,10 +52,12 @@ export class EmployeeListComponent implements OnInit {
   }
 
   initEmployeeList() {
-    this.employeeService.getList()
+    this.employeeService.getPageableList(this.page, this.size, this.column, this.order)
       .subscribe(
         response => {
-          this.list = response;
+          this.list = response['content']; 
+        this.length = response['totalElements'];
+        this.lastPage = response['totalPages']; 
           console.log(this.list);
         },
         error => {
@@ -201,5 +212,30 @@ export class EmployeeListComponent implements OnInit {
           console.log(error)
         }
       );
+  }
+
+  onPageChange(pageNumber){   
+    this.page = pageNumber-1;   
+    this.initEmployeeList(); 
+    
+  }
+
+  onSizeChange(){
+    this.page = 0;  
+    this.initEmployeeList(); 
+  }
+ 
+  onSort({column, direction}: SortEvent) {
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+    this.page = 0;
+    this.column = column;
+    this.order = direction;
+    console.log(column)
+    console.log(direction)
+    this.initEmployeeList();
   }
 }
