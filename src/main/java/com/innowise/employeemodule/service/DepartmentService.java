@@ -7,5 +7,8 @@ public interface DepartmentService extends AbstractService<Department> {
 
     Department create(Department department, Long manager_id);
 
+    Department edit(Department department, Long manager_id);
+
     Page<Department> getAllPage(int size, int page, String column, String order);
+
 }

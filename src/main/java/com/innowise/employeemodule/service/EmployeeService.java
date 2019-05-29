@@ -9,7 +9,7 @@ public interface EmployeeService extends AbstractService<Employee> {
 
     Employee create(Employee employee, Long position_id, Long department_id);
 
-    void recoveryEmployee(Long id);
+    void recoveryEmployee(Long id, Long position_id, Long department_id);
 
     Page<Employee> getAllPage(int size, int page, String column, String order);
 }

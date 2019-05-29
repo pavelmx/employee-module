@@ -3,6 +3,7 @@ package com.innowise.employeemodule.controller;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.PositionEmployee;
+import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.EmployeeService;
 import com.innowise.employeemodule.service.PositionEmployeeService;
 import com.innowise.employeemodule.service.PositionService;
@@ -28,60 +29,100 @@ public class PositionEmployeeController {
     private PositionService positionService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PositionEmployee> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PositionEmployee>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAll() {
+        try {
+            return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<PositionEmployee> create(@RequestBody PositionEmployee positionEmployee) {
-        return new ResponseEntity<>(service.add(positionEmployee), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody PositionEmployee positionEmployee) {
+        try {
+            return new ResponseEntity<>(service.add(positionEmployee), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<PositionEmployee> update(@RequestBody PositionEmployee positionEmployee) {
-        return new ResponseEntity<>(service.update(positionEmployee), HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody PositionEmployee positionEmployee) {
+        try {
+            return new ResponseEntity<>(service.update(positionEmployee), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
-        return new ResponseEntity<>("PositionEmployee with id: '" + id + "' was deleted" ,HttpStatus.OK);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return new ResponseEntity<>(new RestResponse("PositionEmployee with id: '" + id + "' was deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<String> deleteAll() {
-        service.deleteAll();
-        return new ResponseEntity<>("All PositionEmployee's deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteAll() {
+        try {
+            service.deleteAll();
+            return new ResponseEntity<>(new RestResponse("All PositionEmployee's deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all-page")
-    public ResponseEntity<Page<PositionEmployee>> getAllPage(@RequestParam int size, @RequestParam int page,
-                                                       @RequestParam String column, @RequestParam String order) {
-        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+    public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
+                                        @RequestParam String column, @RequestParam String order) {
+        try {
+            return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("all/{employee_id}")
-    public ResponseEntity<List<PositionEmployee>> getAllByEmployeeId(@PathVariable Long employee_id){
-        return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+    public ResponseEntity<?> getAllByEmployeeId(@PathVariable Long employee_id) {
+        try {
+            return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("current/{employee_id}")
-    public ResponseEntity<PositionEmployee> getByEmployeeIdAndEndDateForPositionIsNull(@PathVariable Long employee_id){
-        return new ResponseEntity<>(service.getByEmployeeIdAndEndDateForPositionIsNull(employee_id), HttpStatus.OK);
+    public ResponseEntity<?> getByEmployeeIdAndEndDateForPositionIsNull(@PathVariable Long employee_id) {
+        try {
+            return new ResponseEntity<>(service.getCurrentByEmployeeIdAndEndDateForPositionIsNull(employee_id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("change")
-    public ResponseEntity<String> changePosition(@RequestParam Long employee_id, @RequestParam Long newposition_id) {
-        service.changePosition(employee_id, newposition_id);
-        Position position = positionService.getById(newposition_id);
-        Employee employee = employeeService.getById(employee_id);
-        return new ResponseEntity<>("Employee '" + employee.getPersonalInfo().getFirstName() + " "
-                + employee.getPersonalInfo().getLastName() + "' promoted to a position '" + position.getName() + "'", HttpStatus.OK);
+    public ResponseEntity<?> changePosition(@RequestParam Long employee_id, @RequestParam Long newposition_id) {
+        try {
+            service.changePosition(employee_id, newposition_id);
+            Position position = positionService.getById(newposition_id);
+            Employee employee = employeeService.getById(employee_id);
+            return new ResponseEntity<>(new RestResponse("Employee '" + employee.getPersonalInfo().getFirstName() + " "
+                    + employee.getPersonalInfo().getLastName() + "' promoted to a position '" + position.getName() + "'"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

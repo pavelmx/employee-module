@@ -2,6 +2,7 @@ package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.entity.Position;
+import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.HiringEmployeeInfoService;
 import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,41 +21,69 @@ public class HiringEmployeeInfoController {
     private HiringEmployeeInfoService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<HiringEmployeeInfo> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<HiringEmployeeInfo>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAll() {
+        try {
+            return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all-page")
-    public ResponseEntity<Page<HiringEmployeeInfo>> getAllPage(@RequestParam int size, @RequestParam int page,
-                                                               @RequestParam String column, @RequestParam String order) {
-        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+    public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
+                                        @RequestParam String column, @RequestParam String order) {
+        try {
+            return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<HiringEmployeeInfo> create(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
-        return new ResponseEntity<>(service.add(hiringEmployeeInfo), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
+        try {
+            return new ResponseEntity<>(service.add(hiringEmployeeInfo), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<HiringEmployeeInfo> update(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
-        return new ResponseEntity<>(service.update(hiringEmployeeInfo), HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
+        try {
+            return new ResponseEntity<>(service.update(hiringEmployeeInfo), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
-        return new ResponseEntity<>("HiringEmployeeInfo with id: '" + id + "' was deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return new ResponseEntity<>(new RestResponse("HiringEmployeeInfo with id: '" + id + "' was deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<String> deleteAll() {
-        service.deleteAll();
-        return new ResponseEntity<>("All HiringEmployeeInfo's deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteAll() {
+        try {
+            service.deleteAll();
+            return new ResponseEntity<>(new RestResponse("All HiringEmployeeInfo's deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

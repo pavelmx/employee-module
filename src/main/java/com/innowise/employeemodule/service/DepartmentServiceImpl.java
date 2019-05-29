@@ -1,6 +1,7 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.Department;
+import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department getById(Long id) {
         return repository.findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("Department with id: '" + id + "' not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Department with id: '" + id + "' not found"));
     }
 
     @Override
@@ -35,7 +36,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department add(Department department) {
-        if(repository.existsByName(department.getName())){
+        if (repository.existsByName(department.getName())) {
             throw new EntityExistsException("Department with name: '" + department.getName() + "' already exists");
         }
         return repository.save(department);
@@ -43,15 +44,21 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department update(Department department) {
-        if(!repository.existsById(department.getId())){
+        if (!repository.existsById(department.getId())) {
             throw new EntityNotFoundException("Department with id: '" + department.getId() + "' not found");
+        }
+        Department oldDepartment = getById(department.getId());
+        if (!oldDepartment.getName().equals(department.getName())) {
+            if (repository.existsByName(department.getName())) {
+                throw new EntityExistsException("Department with name: '" + department.getName() + "' already exists");
+            }
         }
         return repository.save(department);
     }
 
     @Override
     public void deleteById(Long id) {
-        if(!repository.existsById(id)){
+        if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Department with id: '" + id + "' not found");
         }
         repository.deleteById(id);
@@ -64,20 +71,31 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department create(Department department, Long manager_id) {
-        if(manager_id == null){
+        if (manager_id == null) {
             department.setManager(null);
-        }else{
+        } else {
             department.setManager(employeeService.getById(manager_id));
         }
         return add(department);
     }
 
     @Override
+    public Department edit(Department department, Long manager_id) {
+        System.out.println(manager_id);
+        if (manager_id == null) {
+            department.setManager(null);
+        } else {
+            department.setManager(employeeService.getById(manager_id));
+        }
+        return update(department);
+    }
+
+    @Override
     public Page<Department> getAllPage(int size, int page, String column, String order) {
         Pageable pageable;
-        if(order.equals("")){
+        if (order.equals("")) {
             pageable = PageRequest.of(page, size);
-        }else{
+        } else {
             pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
         }
         return repository.findAll(pageable);

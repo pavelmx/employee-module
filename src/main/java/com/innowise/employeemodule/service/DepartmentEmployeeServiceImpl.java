@@ -36,6 +36,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public DepartmentEmployee add(DepartmentEmployee departmentEmployee) {
+        departmentEmployee.setCurrentDepartment(true);
         return repository.save(departmentEmployee);
     }
 
@@ -67,22 +68,26 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     }
 
     @Override
-    public DepartmentEmployee getByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id){
+    public DepartmentEmployee getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id){
         DepartmentEmployee departmentEmployee = repository.findByEmployee_IdAndIsCurrentDepartmentTrue(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("DepartmentEmployee by employee's id: '" + employee_id + "' where IsCurrentDepartment = true not found"));
         return departmentEmployee;
     }
 
     @Override
+    public void leaveDepartment(DepartmentEmployee departmentEmployee){
+        departmentEmployee.setCurrentDepartment(false);
+        departmentEmployee.setEndDateInDepartment(LocalDate.now());
+        update(departmentEmployee);
+    }
+
+    @Override
     public void changeDepartment(Long newdepartment_id, Long employee_id){
-        DepartmentEmployee oldDepartmentEmployee = getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
-        oldDepartmentEmployee.setCurrentDepartment(false);
-        oldDepartmentEmployee.setEndDateInDepartment(LocalDate.now());
-        update(oldDepartmentEmployee);
+        DepartmentEmployee oldDepartmentEmployee = getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
+        leaveDepartment(oldDepartmentEmployee);
         DepartmentEmployee newDepartmentEmployee = new DepartmentEmployee();
         newDepartmentEmployee.setStartDateInDepartment(LocalDate.now());
         newDepartmentEmployee.setEmployee(oldDepartmentEmployee.getEmployee());
-        newDepartmentEmployee.setCurrentDepartment(true);
         newDepartmentEmployee.setPositionEmployee(oldDepartmentEmployee.getPositionEmployee());
         newDepartmentEmployee.setDepartment(departmentService.getById(newdepartment_id));
         add(newDepartmentEmployee);

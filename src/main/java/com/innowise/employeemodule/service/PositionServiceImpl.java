@@ -46,6 +46,12 @@ public class PositionServiceImpl implements PositionService {
         if (!repository.existsById(position.getId())) {
             throw new EntityNotFoundException("Position with id: '" + position.getId() + "' not found");
         }
+        Position oldPosition = getById(position.getId());
+        if(!oldPosition.getName().equals(position.getName())){
+            if (repository.existsByName(position.getName())) {
+                throw new EntityExistsException("Position with name: '" + position.getName() + "' already exists");
+            }
+        }
         return repository.save(position);
     }
 

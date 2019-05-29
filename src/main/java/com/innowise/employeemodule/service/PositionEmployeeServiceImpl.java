@@ -72,23 +72,28 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
     }
 
     @Override
-    public PositionEmployee getByEmployeeIdAndEndDateForPositionIsNull(Long employee_id){
+    public PositionEmployee getCurrentByEmployeeIdAndEndDateForPositionIsNull(Long employee_id){
         PositionEmployee positionEmployee = repository.findByEmployee_IdAndEndDateForPositionIsNull(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("PositionEmployee by employee's id: '" + employee_id + "' where EndDateForPosition = null not found"));
         return positionEmployee;
     }
 
     @Override
+    public void leavePosition(PositionEmployee positionEmployee){
+        positionEmployee.setEndDateForPosition(LocalDate.now());
+        update(positionEmployee);
+    }
+
+    @Override
     public void changePosition(Long employee_id, Long newposition_id) {
-        PositionEmployee oldPositionEmployee = getByEmployeeIdAndEndDateForPositionIsNull(employee_id);
-        oldPositionEmployee.setEndDateForPosition(LocalDate.now());
-        update(oldPositionEmployee);
+        PositionEmployee oldPositionEmployee = getCurrentByEmployeeIdAndEndDateForPositionIsNull(employee_id);
+        leavePosition(oldPositionEmployee);
         PositionEmployee newPositionEmployee = new PositionEmployee();
         newPositionEmployee.setStartDateForPosition(LocalDate.now());
         newPositionEmployee.setPosition(positionService.getById(newposition_id));
         newPositionEmployee.setEmployee(oldPositionEmployee.getEmployee());
         add(newPositionEmployee);
-        DepartmentEmployee departmentEmployee = departmentEmployeeService.getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
+        DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
         departmentEmployee.setPositionEmployee(newPositionEmployee);
         departmentEmployeeService.update(departmentEmployee);
     }

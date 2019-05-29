@@ -9,9 +9,11 @@ public interface PositionEmployeeService extends AbstractService<PositionEmploye
 
     void changePosition(Long employee_id, Long newposition_id);
 
-    PositionEmployee getByEmployeeIdAndEndDateForPositionIsNull(Long employee_id);
+    PositionEmployee getCurrentByEmployeeIdAndEndDateForPositionIsNull(Long employee_id);
 
     List<PositionEmployee> getAllByEmployeeId(Long employee_id);
+
+    void leavePosition(PositionEmployee positionEmployee);
 
     Page<PositionEmployee> getAllPage(int size, int page, String column, String order);
 }

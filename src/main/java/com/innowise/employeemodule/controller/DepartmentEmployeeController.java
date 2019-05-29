@@ -1,9 +1,6 @@
 package com.innowise.employeemodule.controller;
 
-import com.innowise.employeemodule.entity.Department;
-import com.innowise.employeemodule.entity.DepartmentEmployee;
-import com.innowise.employeemodule.entity.Employee;
-import com.innowise.employeemodule.entity.PositionEmployee;
+import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.service.DepartmentEmployeeService;
 import com.innowise.employeemodule.service.DepartmentService;
 import com.innowise.employeemodule.service.EmployeeService;
@@ -29,60 +26,100 @@ public class DepartmentEmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<DepartmentEmployee> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<DepartmentEmployee>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAll() {
+        try {
+            return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<DepartmentEmployee> create(@RequestBody DepartmentEmployee departmentEmployee) {
-        return new ResponseEntity<>(service.add(departmentEmployee), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody DepartmentEmployee departmentEmployee) {
+        try {
+            return new ResponseEntity<>(service.add(departmentEmployee), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentEmployee> update(@RequestBody DepartmentEmployee departmentEmployee) {
-        return new ResponseEntity<>(service.update(departmentEmployee), HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody DepartmentEmployee departmentEmployee) {
+        try {
+            return new ResponseEntity<>(service.update(departmentEmployee), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable  Long id) {
-        service.deleteById(id);
-        return new ResponseEntity<>("DepartmentEmployee with id: '" + id + "' was deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return new ResponseEntity<>(new RestResponse("DepartmentEmployee with id: '" + id + "' was deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<String> deleteAll() {
-        service.deleteAll();
-        return new ResponseEntity<>("All DepartmentEmployee's deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteAll() {
+        try {
+            service.deleteAll();
+            return new ResponseEntity<>(new RestResponse("All DepartmentEmployee's deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all-page")
-    public ResponseEntity<Page<DepartmentEmployee>> getAllPage(@RequestParam int size, @RequestParam int page,
-                                                       @RequestParam String column, @RequestParam String order) {
-        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+    public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
+                                        @RequestParam String column, @RequestParam String order) {
+        try {
+            return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("all/{employee_id}")
-    public ResponseEntity<List<DepartmentEmployee>> getAllByEmployeeId(@PathVariable Long employee_id){
-        return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+    public ResponseEntity<?> getAllByEmployeeId(@PathVariable Long employee_id) {
+        try {
+            return new ResponseEntity<>(service.getAllByEmployeeId(employee_id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("current/{employee_id}")
-    public ResponseEntity<DepartmentEmployee> getByEmployeeIdAndIsCurrentDepartmentTrue(@PathVariable Long employee_id){
-        return new ResponseEntity<>(service.getByEmployeeIdAndIsCurrentDepartmentTrue(employee_id), HttpStatus.OK);
+    public ResponseEntity<?> getByEmployeeIdAndIsCurrentDepartmentTrue(@PathVariable Long employee_id) {
+        try {
+            return new ResponseEntity<>(service.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/change")
-    public ResponseEntity<String> changeDepartment(@RequestParam Long newdepartment_id, @RequestParam Long employee_id){
-        service.changeDepartment(newdepartment_id, employee_id);
-        Employee employee = employeeService.getById(employee_id);
-        Department department = departmentService.getById(newdepartment_id);
-        return new ResponseEntity<>("Employee '" + employee.getPersonalInfo().getFirstName() + " "
-                + employee.getPersonalInfo().getLastName() + "' moved to department '" + department.getName() + "'", HttpStatus.OK);
+    public ResponseEntity<?> changeDepartment(@RequestParam Long newdepartment_id, @RequestParam Long employee_id) {
+        try {
+            service.changeDepartment(newdepartment_id, employee_id);
+            Employee employee = employeeService.getById(employee_id);
+            Department department = departmentService.getById(newdepartment_id);
+            return new ResponseEntity<>(new RestResponse("Employee '" + employee.getPersonalInfo().getFirstName() + " "
+                    + employee.getPersonalInfo().getLastName() + "' moved to department '" + department.getName() + "'"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

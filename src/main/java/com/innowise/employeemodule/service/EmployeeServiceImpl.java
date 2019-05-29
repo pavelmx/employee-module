@@ -74,14 +74,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPersonalInfo(p);
         employee.setActive(true);
         Employee createdEmployee = repository.save(employee);
+        createHistoryLists(department, position, createdEmployee);
+
+        return createdEmployee;
+    }
+
+    private void createHistoryLists(Department department, Position position, Employee employee) {
         //write info of hiring
         HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
         hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
-        hiringEmployeeInfo.setEmployee(createdEmployee);
+        hiringEmployeeInfo.setEmployee(employee);
         hiringEmployeeInfoService.add(hiringEmployeeInfo);
         //create position_employee
         PositionEmployee positionEmployee = new PositionEmployee();
-        positionEmployee.setEmployee(createdEmployee);
+        positionEmployee.setEmployee(employee);
         positionEmployee.setPosition(position);
         positionEmployee.setStartDateForPosition(LocalDate.now());
         PositionEmployee createdPositionEmployee = positionEmployeeService.add(positionEmployee);
@@ -89,12 +95,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         DepartmentEmployee departmentEmployee = new DepartmentEmployee();
         departmentEmployee.setCurrentDepartment(true);
         departmentEmployee.setDepartment(department);
-        departmentEmployee.setEmployee(createdEmployee);
+        departmentEmployee.setEmployee(employee);
         departmentEmployee.setPositionEmployee(createdPositionEmployee);
         departmentEmployee.setStartDateInDepartment(LocalDate.now());
         departmentEmployeeService.add(departmentEmployee);
-
-        return createdEmployee;
     }
 
     @Override
@@ -129,21 +133,24 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setActive(false);
             repository.save(employee);
             hiringEmployeeInfoService.setDismissEmployee(employee);
+            DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(id);
+            departmentEmployeeService.leaveDepartment(departmentEmployee);
+            PositionEmployee positionEmployee = positionEmployeeService.getCurrentByEmployeeIdAndEndDateForPositionIsNull(id);
+            positionEmployeeService.leavePosition(positionEmployee);
         } else {
             throw new RuntimeException("Employee is unactive now");
         }
     }
 
     @Override
-    public void recoveryEmployee(Long id) {
+    public void recoveryEmployee(Long id, Long position_id, Long department_id) {
         Employee employee = getById(id);
+        Department department = departmentService.getById(department_id);
+        Position position = positionService.getById(position_id);
         if (employee.isActive() == false) {
             employee.setActive(true);
-            Employee createdEmployee = repository.save(employee);
-            HiringEmployeeInfo hiringEmployeeInfo = new HiringEmployeeInfo();
-            hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
-            hiringEmployeeInfo.setEmployee(createdEmployee);
-            hiringEmployeeInfoService.add(hiringEmployeeInfo);
+            Employee recoveryEmployee = repository.save(employee);
+            createHistoryLists(department, position, recoveryEmployee);
         } else {
             throw new RuntimeException("Employee is active now");
         }

@@ -5,6 +5,7 @@ import com.innowise.employeemodule.dto.PositionDTO.PositionCreationDTO;
 import com.innowise.employeemodule.dto.PositionDTO.PositionUpdateDTO;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.Position;
+import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.EmployeeService;
 import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,58 +24,100 @@ public class PositionController {
     private PositionService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Position> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Position>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAll() {
+        try {
+            return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all-page")
-    public ResponseEntity<Page<Position>> getAllPage(@RequestParam int size, @RequestParam int page,
-                                                       @RequestParam String column, @RequestParam String order) {
-        return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+    public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
+                                        @RequestParam String column, @RequestParam String order) {
+        try {
+            return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Position> create(@RequestBody Position position) {
-        return new ResponseEntity<>(service.add(position), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody Position position) {
+        try {
+            return new ResponseEntity<>(service.add(position), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<Position> update(@RequestBody Position position) {
-        return new ResponseEntity<>(service.update(position), HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody Position position) {
+        try {
+            return new ResponseEntity<>(service.update(position), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
-        return new ResponseEntity<>("Position with id: '" + id + "' was deleted" ,HttpStatus.OK);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return new ResponseEntity<>(new RestResponse("Position with id: '" + id + "' was deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<String> deleteAll() {
-        service.deleteAll();
-        return new ResponseEntity<>("All positions deleted", HttpStatus.OK);
+    public ResponseEntity<?> deleteAll() {
+        try {
+            service.deleteAll();
+            return new ResponseEntity<>(new RestResponse("All positions deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("disable/{id}")
-    public ResponseEntity<String> disablePositionById(@PathVariable("id") Long id) {
-        service.disable(id);
-        return new ResponseEntity<>("Position with id: '" + id + "' disabled", HttpStatus.OK);
+    public ResponseEntity<?> disablePositionById(@PathVariable("id") Long id) {
+        try {
+            Position position = service.getById(id);
+            service.disable(id);
+            return new ResponseEntity<>(new RestResponse("Position '" + position.getName() + "' disabled"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("enable/{id}")
-    public ResponseEntity<String> enablePositionById(@PathVariable("id") Long id) {
-        service.enable(id);
-        return new ResponseEntity<>("Position with id: '" + id + "' enabled", HttpStatus.OK);
+    public ResponseEntity<?> enablePositionById(@PathVariable("id") Long id) {
+        try {
+            Position position = service.getById(id);
+            service.enable(id);
+            return new ResponseEntity<>(new RestResponse("Position '" + position.getName() + "' enabled"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("enable/all")
-    public ResponseEntity<List<Position>> getEnableAll() {
-        return new ResponseEntity<>(service.getEnableAll(), HttpStatus.OK);
+    public ResponseEntity<?> getEnableAll() {
+        try {
+            return new ResponseEntity<>(service.getEnableAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
