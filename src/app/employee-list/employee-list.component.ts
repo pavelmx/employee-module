@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
 import { EmployeeService } from '../services/employee.service';
 import { Employee } from '../models/employee.model';
 import { PersonalInfo } from '../models/personal-info.model';
@@ -10,6 +10,7 @@ import { Position } from '../models/position.model';
 import { PositionEmployee } from '../models/position-employee.model';
 import { DepartmentEmployee } from '../models/department-employee.model';
 import { SortEvent, NgbdSortableHeader } from '../util/sortable.directive';
+import { ToastService } from '../util/toast.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -32,18 +33,24 @@ export class EmployeeListComponent implements OnInit {
   page: number = 0;
   size: number = 5;
   column: string = 'id';
-  order: string = '';
+  order: string = 'asc';
   length: number;
   lastPage: number;
+  currentEmployee: Employee;
 
-
+  @ViewChild('close_add') closeAddModal: ElementRef;
+  @ViewChild('close_info') closeEditModal: ElementRef;
+  @ViewChild('close_pos') closePosModal: ElementRef;
+  @ViewChild('close_dep') closeDepModal: ElementRef;
+  @ViewChild('close_rec') closeRecModal: ElementRef;
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
 
   constructor(
     private employeeService: EmployeeService,
     private positionService: PositionService,
-    private departmentService: DepartmentService) { }
+    private departmentService: DepartmentService,
+    private toast: ToastService) { }
 
   ngOnInit() {
     this.initDepartmentList();
@@ -101,12 +108,20 @@ export class EmployeeListComponent implements OnInit {
         response => {
           console.log(response)
           this.initEmployeeList();
+          this.closeAddModal.nativeElement.click();
           form.resetForm();
+          this.toast.showSuccess("Success","New employee '" + response.personalInfo.firstName + " " +
+          response.personalInfo.lastName + "' added");
         },
         error => {
           console.log(error)
+          this.toast.showError("Error", error.error.message);
         }
       );
+  }
+
+  setEmployee(employee: Employee){
+    this.currentEmployee = employee;
   }
 
   setEditEmployee(employee: Employee) {
@@ -125,40 +140,49 @@ export class EmployeeListComponent implements OnInit {
         response => {
           console.log(response)
           this.initEmployeeList();
-          form.resetForm();
+          this.closeEditModal.nativeElement.click();
+          this.toast.showSuccess("Success","Employee '" + response.personalInfo.firstName + " " +
+          response.personalInfo.lastName + "' updated");
         },
         error => {
           console.log(error)
+          this.toast.showError("Error", error.error.message);
         }
       );
   }
 
-  dismissRecoveryEmployee(choosed: number, id: number) {
-    if (choosed === 0) {
+  dismissEmployee(id: number) {
+    
       this.employeeService.dismiss(id)
         .subscribe(
           response => {
             this.initEmployeeList();
+            this.toast.showSuccess("Success", response.message);
+            console.log(response)
           },
-          error => {
-            this.initEmployeeList();
+          error => {            
+            this.toast.showError("Error", error.error.message);
             console.log(error)
           }
-        );
-    }
-    if (choosed === 1) {
-      this.employeeService.recovery(id)
-        .subscribe(
-          response => {
-            this.initEmployeeList();
-          },
-          error => {
-            this.initEmployeeList();
-            console.log(error)
-          }
-        );
-    }
+        );       
   }
+
+  recoveryEmployee() {
+    
+    this.employeeService.recovery(this.currentEmployee.id, this.formchange.rec_position_id, 
+       this.formchange.rec_department_id)
+      .subscribe(
+        response => {
+          this.initEmployeeList();
+          this.toast.showSuccess("Success", response.message);
+          this.closeRecModal.nativeElement.click();
+        },
+        error => {          
+          this.toast.showError("Error", error.error.message);
+          console.log(error)
+        }
+      );       
+}
 
   setCurrentPosition(id: number) {
     this.employeeService.getCurrentPositionEmployee(id)
@@ -179,9 +203,11 @@ export class EmployeeListComponent implements OnInit {
       .subscribe(
         response => {
           this.setCurrentPosition(this.formchange.currentEmployeeId);
+          this.toast.showSuccess("Success", response.message);
+          this.closePosModal.nativeElement.click();
         },
-        error => {
-          this.setCurrentPosition(this.formchange.currentEmployeeId);
+        error => {         
+          this.toast.showError("Error", error.error.message);
           console.log(error)
         }
       );
@@ -206,9 +232,11 @@ export class EmployeeListComponent implements OnInit {
       .subscribe(
         response => {
           this.setCurrentDepartment(this.formchange.currentEmployeeId);
+          this.toast.showSuccess("Success", response.message);
+          this.closeDepModal.nativeElement.click();
         },
         error => {
-          this.setCurrentDepartment(this.formchange.currentEmployeeId);
+          this.toast.showError("Error", error.error.message);
           console.log(error)
         }
       );

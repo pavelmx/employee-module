@@ -51,11 +51,11 @@
       <td>{{employee.personalInfo.skype}}</td>
       <td>{{employee.personalInfo.email}}</td>
       <td>{{employee.personalInfo.phoneNumber}}</td>
-      <td>
+      <td>{{employee.active}} 
         <button *ngIf="employee.active===true" class="btn btn-danger ml-2"
-          (click)="dismissRecoveryEmployee(0, employee.id)">Dismiss</button>
+          (click)="dismissEmployee(employee.id)">Dismiss</button>
         <button *ngIf="employee.active===false" class="btn btn-primary ml-2"
-          (click)="dismissRecoveryEmployee(1, employee.id)">Recovery</button>
+          data-toggle="modal" data-target="#recoveryModal" (click)="setEmployee(employee)">Recovery</button>
       </td>
       <td>
         <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#infoModal"
@@ -85,7 +85,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Add new Employee</h5>
-        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
+        <button #close_add type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -162,7 +162,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" 
           (click)="add(f)">Save</button>
       </div>
     </div>
@@ -176,7 +176,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Employee personal info</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button #close_info type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -255,7 +255,8 @@
           </div>
           <div class="col">
             <button data-dismiss="editModal" class="btn btn-primary ml-2" data-toggle="modal"
-              data-target="#changePositionModal" (click)="setCurrentPosition(formedit.id)">Change position</button>
+              data-target="#changePositionModal" (click)="setCurrentPosition(formedit.id)"
+              [disabled]="!currentPositionEmployee">Change position</button>
           </div>
         </div>
         <div class="row">
@@ -269,14 +270,15 @@
           </div>
           <div class="col align-items-end">
             <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#changeDepartmentModal"
-              (click)="setCurrentDepartment(formedit.id)">Change department</button>
+              (click)="setCurrentDepartment(formedit.id)"
+              [disabled]="!currentDepartmentEmployee">Change department</button>
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" 
           (click)="edit(fedit)">Update</button>
       </div>
     </div>
@@ -290,7 +292,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Change position</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button #close_pos type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -301,15 +303,15 @@
               <div class="form-group">
                 <label>Current position</label>
                 <input readonly type="text" class="form-control" placeholder="Current position"
-                  name="currentPositionName" [(ngModel)]="formchange.currentPositionName"
-                  #currentPositionName="ngModel">
+                  name="currentPositionName2" [(ngModel)]="formchange.currentPositionName"
+                  #currentPositionName2="ngModel">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
                 <label for="position_id">New position</label>
-                <select class="custom-select" name="position_id" [(ngModel)]="formchange.position_id2"
-                  #position_id2="ngModel">
+                <select required class="custom-select" name="position_id3" [(ngModel)]="formchange.position_id"
+                  #position_id3="ngModel">
                   <option *ngFor="let position of positionList" [ngValue]="position.id">{{position.name}}</option>
                 </select>
               </div>
@@ -318,9 +320,8 @@
         </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button [disabled]="formchange.currentPositionId==formchange.position_id2" type="button"
-            class="btn btn-primary" [disabled]="fchangeposition.form.invalid" data-dismiss="modal"
-            (click)="changePosition()">Change</button>
+          <button [disabled]="formchange.currentPositionId==formchange.position_id" type="button"
+            class="btn btn-primary" [disabled]="fchangeposition.form.invalid" (click)="changePosition()">Change</button>
         </div>
       </div>
     </div>
@@ -334,7 +335,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Change department</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button #close_dep type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -345,15 +346,15 @@
               <div class="form-group">
                 <label>Current department</label>
                 <input readonly type="text" class="form-control" placeholder="Current department"
-                  name="currentDepartmentName" [(ngModel)]="formchange.currentDepartmentName"
-                  #currentDepartmentName="ngModel">
+                  name="currentDepartmentName2" [(ngModel)]="formchange.currentDepartmentName"
+                  #currentDepartmentName2="ngModel">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
                 <label for="department_id">New department</label>
-                <select class="custom-select" name="department_id" [(ngModel)]="formchange.department_id2"
-                  #department_id2="ngModel">
+                <select required class="custom-select" name="department_id3" [(ngModel)]="formchange.department_id"
+                  #department_id3="ngModel">
                   <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}
                   </option>
                 </select>
@@ -363,11 +364,53 @@
         </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button [disabled]="formchange.currentDepartmentId==formchange.department_id2" type="button"
-            class="btn btn-primary" [disabled]="fchangedepartment.form.invalid" data-dismiss="modal"
-            (click)="changeDepartment()">Change</button>
+          <button [disabled]="formchange.currentDepartmentId==formchange.department_id" type="button"
+            class="btn btn-primary" [disabled]="fchangedepartment.form.invalid" (click)="changeDepartment()">Change</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- recovery modal -->
+ <div class="modal fade bd-example-modal-lg" id="recoveryModal" tabindex="-1" role="dialog" 
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Recovery employee</h5>
+        <button #close_rec type="button" class="close" data-dismiss="modal" (click)="frecovery.resetForm()"  aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="formchange" #frecovery="ngForm">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="department_id">Department</label>
+                <select required class="custom-select" name="rec_department_id" [(ngModel)]="formchange.rec_department_id"
+                  #rec_department_id="ngModel">
+                  <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="position_id">Position</label>
+                <select required class="custom-select" name="rec_position_id" [(ngModel)]="formchange.rec_position_id"
+                  #rec_position_id="ngModel">
+                  <option *ngFor="let position of positionList" [ngValue]="position.id">{{position.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="frecovery.resetForm()">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="frecovery.form.invalid" (click)="recoveryEmployee()" >Recovery</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

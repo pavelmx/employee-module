@@ -44,19 +44,19 @@ export class EmployeeService {
   }
 
   dismiss(id: number){
-    return this.http.get<string>(this.dismissUrl + id);
+    return this.http.get<any>(this.dismissUrl + id);
   }
 
-  recovery(id: number){
-    return this.http.get<string>(this.recoveryUrl + id);
+  recovery(id: number, position_id: number, department_id: number){
+    return this.http.get<any>(this.recoveryUrl + id  + "?position_id=" + position_id + "&department_id=" + department_id);
   }
 
   changePosition(idEmployee: number, idNewPosition: number){
-    return this.http.get<string>(this.changePositionUrl + "?employee_id=" + idEmployee + "&newposition_id=" + idNewPosition);
+    return this.http.get<any>(this.changePositionUrl + "?employee_id=" + idEmployee + "&newposition_id=" + idNewPosition);
   }
 
   changeDepartment(idEmployee: number, idNewDepartment: number){
-    return this.http.get<string>(this.changeDepartmentUrl + "?employee_id=" + idEmployee + "&newdepartment_id=" + idNewDepartment);
+    return this.http.get<any>(this.changeDepartmentUrl + "?employee_id=" + idEmployee + "&newdepartment_id=" + idNewDepartment);
   }
 
   getCurrentPositionEmployee(idEmployee: number){

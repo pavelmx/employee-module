@@ -27,10 +27,19 @@ export class DepartmentService {
   }
 
   add(body: Department, manager_id: any){   
+    if(manager_id == undefined)
+    {
+      manager_id = '';
+    }
     return this.http.post<Department>(this.addEditUrl + "?manager_id=" + manager_id, body);
   }
 
-  edit(body: Department){
-    return this.http.put<Department>(this.addEditUrl, body);
+  edit(body: Department, manager_id: any){   
+    if(manager_id == undefined)
+    {
+      manager_id = '';
+    }
+    return this.http.put<Department>(this.addEditUrl + "?manager_id=" + manager_id, body);
   }
+  
 }

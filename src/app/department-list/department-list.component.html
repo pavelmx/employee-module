@@ -2,7 +2,6 @@
   <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add department</button>
 </div>
 <br>
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -58,7 +57,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
-        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close" #close_add>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -70,8 +69,9 @@
           </div>
           <div class="form-group">
             <label for="manager_id">Manager</label>
-            <select required class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel"
+            <select  class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel"
             [ngClass]="{'is-valid':manager_id.valid && manager_id.touched,'is-invalid':manager_id.invalid && manager_id.touched}" >               
+              <option [ngValue]="undefined" >Not assigned</option>
               <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
@@ -80,7 +80,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" 
           (click)="add(f)">Save</button>
       </div>
     </div>
@@ -93,8 +93,8 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Edit Department</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Update Department</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #close_edit>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -110,17 +110,19 @@
           </div>
           <div class="form-group">
             <label for="manager_id">Manager</label>
-            <select required class="custom-select" name="manager_id2" [(ngModel)]="formedit.manager_id" #manager_id2="ngModel"
+            <select  class="custom-select" name="manager_id2" [(ngModel)]="formedit.manager_id" #manager_id2="ngModel"
             [ngClass]="{'is-valid':manager_id2.valid ,'is-invalid':manager_id2.invalid }">              
-              <option *ngFor="let employee of employeeList"  [ngValue]="employee.id">
+            <option [ngValue]="undefined" >Not assigned</option>  
+            <option *ngFor="let employee of employeeList"  [ngValue]="employee.id">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
           </div>
         </form>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" 
           (click)="edit(fedit)">Update</button>
       </div>
     </div>

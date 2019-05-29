@@ -16,6 +16,8 @@ import { DepartmentEmployeeListComponent } from './department-employee-list/depa
 import { PositionEmployeeListComponent } from './position-employee-list/position-employee-list.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgbdSortableHeader } from './util/sortable.directive';
+import { ToasterModule } from 'angular2-toaster';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -36,11 +38,12 @@ import { NgbdSortableHeader } from './util/sortable.directive';
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({ timeOut: 5000, positionClass: 'toast-top-right'}),
   ],
   providers: [
     EmployeeService,
     CookieService,
-    DepartmentService
+    DepartmentService,
   ],
   bootstrap: [AppComponent]
 })

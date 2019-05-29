@@ -14,7 +14,7 @@ export class PositionEmployeeListComponent implements OnInit {
   page: number = 0;
   size: number = 5;
   column: string = 'id';
-  order: string = '';
+  order: string = 'asc';
   length: number;
   lastPage: number;
 

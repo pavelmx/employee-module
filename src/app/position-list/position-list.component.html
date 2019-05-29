@@ -27,8 +27,8 @@
     <tr *ngFor="let position of list">
       <th>{{position.id}}</th>
       <td>{{position.name}}</td>
-      <td *ngIf="position.active===true"><button class="btn btn-primary" (click)="changeStatus(0, position.id)">Enabled</button></td>
-      <td *ngIf="position.active===false"><button class="btn btn-danger" (click)="changeStatus(1, position.id)">Disabled</button></td>      
+      <td *ngIf="position.active===false">{{position.active}} <button class="btn btn-primary" (click)="enablePosition(position.id)">Enable</button></td>
+      <td *ngIf="position.active===true">{{position.active}} <button class="btn btn-danger" (click)="disablePosition(position.id)">Disable</button></td>      
       <td>          
           <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#editModal"
           (click)="setEditPosition(position)" [disabled]="position.active===false">Edit</button>
@@ -55,8 +55,9 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
-        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Add new Position</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" 
+        aria-label="Close" #close_add>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -66,11 +67,11 @@
             <input required type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="form.name"
               #name="ngModel" [ngClass]="{'is-valid':name.valid && name.touched,'is-invalid':name.invalid && name.touched}">
           </div>
-        </form>
+        </form>          
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" 
           (click)="add(f)">Save</button>
       </div>
     </div>
@@ -83,8 +84,8 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Add new Department</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Update Position</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #close_edit>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -98,11 +99,11 @@
             <input type="text" required class="form-control" placeholder="Name" name="name2" [(ngModel)]="formedit.name"
               #name2="ngModel" [ngClass]="{'is-valid':name2.valid,'is-invalid':name2.invalid }" >
           </div>
-        </form>
+        </form>  
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" data-dismiss="modal"
+        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" 
           (click)="edit(f)">Update</button>
       </div>
     </div>

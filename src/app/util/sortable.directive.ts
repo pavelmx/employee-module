@@ -13,7 +13,6 @@ export interface SortEvent {
   host: {
     '[class.asc]': 'direction === "asc"',
     '[class.desc]': 'direction === "desc"',
-	  // '[class.null]': 'direction === ""',
     '(click)': 'rotate()'
   }
 })
