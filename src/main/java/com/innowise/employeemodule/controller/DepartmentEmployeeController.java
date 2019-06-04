@@ -1,5 +1,9 @@
 package com.innowise.employeemodule.controller;
 
+import com.innowise.employeemodule.config.DTO;
+import com.innowise.employeemodule.dto.DepartmentEmployeeDTO.DepartmentEmployeeGetCurrentDTO;
+import com.innowise.employeemodule.dto.DepartmentEmployeeDTO.DepartmentEmployeeGetDTO;
+import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeGetDTO;
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.service.DepartmentEmployeeService;
 import com.innowise.employeemodule.service.DepartmentService;
@@ -75,13 +79,14 @@ public class DepartmentEmployeeController {
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
-            return new ResponseEntity<>(new RestResponse("All DepartmentEmployee's deleted"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponse("All DepartmentEmployee's were deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/all-page")
+    @DTO(DepartmentEmployeeGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -101,6 +106,7 @@ public class DepartmentEmployeeController {
     }
 
     @GetMapping("current/{employee_id}")
+    @DTO(DepartmentEmployeeGetCurrentDTO.class)
     public ResponseEntity<?> getByEmployeeIdAndIsCurrentDepartmentTrue(@PathVariable Long employee_id) {
         try {
             return new ResponseEntity<>(service.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id), HttpStatus.OK);

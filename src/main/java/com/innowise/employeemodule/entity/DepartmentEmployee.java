@@ -27,10 +27,6 @@ public class DepartmentEmployee extends AbstractEntity {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "position_employee_id")
-    private PositionEmployee positionEmployee;
-
-    @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 

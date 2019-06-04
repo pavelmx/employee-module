@@ -1,5 +1,6 @@
 package com.innowise.employeemodule.dto.DepartmentDTO;
 
+import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeIdDTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeUpdateDTO;
 import com.innowise.employeemodule.entity.Employee;
 import lombok.Getter;
@@ -19,7 +20,6 @@ public class DepartmentUpdateDTO {
     @NotNull
     private String name;
 
-    @NotNull
-    private EmployeeUpdateDTO manager;
+    private Long manager_id;
 
 }

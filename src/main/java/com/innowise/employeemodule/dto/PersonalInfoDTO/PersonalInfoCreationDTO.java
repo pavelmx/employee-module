@@ -26,9 +26,7 @@ public class PersonalInfoCreationDTO {
     @NotNull
     private String phoneNumber;
 
-    /*@NotNull
-    private String skype;*/
+    private String skype;
 
-    @NotNull
     private String description;
 }

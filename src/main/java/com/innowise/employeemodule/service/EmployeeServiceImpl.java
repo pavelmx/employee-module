@@ -2,7 +2,6 @@ package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.repository.EmployeeRepository;
-import com.innowise.employeemodule.repository.PersonalInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
@@ -90,13 +88,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         positionEmployee.setEmployee(employee);
         positionEmployee.setPosition(position);
         positionEmployee.setStartDateForPosition(LocalDate.now());
-        PositionEmployee createdPositionEmployee = positionEmployeeService.add(positionEmployee);
+        positionEmployeeService.add(positionEmployee);
         //create department_employee
         DepartmentEmployee departmentEmployee = new DepartmentEmployee();
         departmentEmployee.setCurrentDepartment(true);
         departmentEmployee.setDepartment(department);
         departmentEmployee.setEmployee(employee);
-        departmentEmployee.setPositionEmployee(createdPositionEmployee);
         departmentEmployee.setStartDateInDepartment(LocalDate.now());
         departmentEmployeeService.add(departmentEmployee);
     }
@@ -104,9 +101,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee update(Employee employee) {
         PersonalInfo truePersonalInfo = getById(employee.getId()).getPersonalInfo();
-        Long idInfo = truePersonalInfo.getId();
-        Long idEmp = employee.getPersonalInfo().getId();
-        if (!idEmp.equals(idInfo)) {
+        Long idInfoDB = truePersonalInfo.getId();
+        Long idInfoJson = employee.getPersonalInfo().getId();
+        if (!idInfoJson.equals(idInfoDB)) {
             throw new RuntimeException("Incorrect personal information for employee with id: '" + employee.getId() + "'");
         }
         personalInfoService.update(employee.getPersonalInfo());
@@ -116,14 +113,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteById(Long id) {
         Long idPersonalInfo = getById(id).getPersonalInfo().getId();
-        repository.deleteById(id);
         personalInfoService.deleteById(idPersonalInfo);
+        hiringEmployeeInfoService.deleteByEmployeeId(id);
+        positionEmployeeService.deleteByEmployeeId(id);
+        departmentEmployeeService.deleteByEmployeeId(id);
+        repository.deleteById(id);
     }
 
     @Override
     public void deleteAll() {
         repository.deleteAll();
         personalInfoService.deleteAll();
+        hiringEmployeeInfoService.deleteAll();
+        positionEmployeeService.deleteAll();
+        departmentEmployeeService.deleteAll();
     }
 
     @Override
@@ -131,7 +134,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = getById(id);
         if (employee.isActive() == true) {
             employee.setActive(false);
-            repository.save(employee);
+            employee = repository.save(employee);
             hiringEmployeeInfoService.setDismissEmployee(employee);
             DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(id);
             departmentEmployeeService.leaveDepartment(departmentEmployee);
@@ -159,9 +162,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Page<Employee> getAllPage(int size, int page, String column, String order) {
         Pageable pageable;
-        if(order.equals("")){
+        if (order.equals("")) {
             pageable = PageRequest.of(page, size);
-        }else{
+        } else {
             pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
         }
         return repository.findAll(pageable);

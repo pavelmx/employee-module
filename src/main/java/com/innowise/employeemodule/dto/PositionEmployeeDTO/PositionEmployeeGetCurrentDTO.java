@@ -1,6 +1,8 @@
 package com.innowise.employeemodule.dto.PositionEmployeeDTO;
 
+import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeIdDTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeUpdateDTO;
+import com.innowise.employeemodule.dto.PositionDTO.PositionGetDTO;
 import com.innowise.employeemodule.dto.PositionDTO.PositionUpdateDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +13,12 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class PositionEmployeeUpdateDTO {
-
-    @Id
-    private Long id;
+public class PositionEmployeeGetCurrentDTO {
 
     @NotNull
-    private EmployeeUpdateDTO employee;
+    private EmployeeIdDTO employee;
 
     @NotNull
-    private PositionUpdateDTO position;
-
+    private PositionGetDTO position;
 
 }

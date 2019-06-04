@@ -16,4 +16,6 @@ public interface PositionEmployeeService extends AbstractService<PositionEmploye
     void leavePosition(PositionEmployee positionEmployee);
 
     Page<PositionEmployee> getAllPage(int size, int page, String column, String order);
+
+    void deleteByEmployeeId(Long employee_id);
 }

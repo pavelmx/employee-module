@@ -1,5 +1,7 @@
 package com.innowise.employeemodule.controller;
 
+import com.innowise.employeemodule.config.DTO;
+import com.innowise.employeemodule.dto.HiringEmployeeInfoDTO.HiringEmployeeInfoGetDTO;
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.RestResponse;
@@ -29,6 +31,15 @@ public class HiringEmployeeInfoController {
         }
     }
 
+    @GetMapping("employee/{id}")
+    public ResponseEntity<?> getByEmployeeId(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(service.getByEmployeeId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
         try {
@@ -39,6 +50,7 @@ public class HiringEmployeeInfoController {
     }
 
     @GetMapping("/all-page")
+    @DTO(HiringEmployeeInfoGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -76,11 +88,21 @@ public class HiringEmployeeInfoController {
         }
     }
 
+    @DeleteMapping("employee/{id}")
+    public ResponseEntity<?> deleteByEmployeeId(@PathVariable Long id) {
+        try {
+            service.deleteByEmployeeId(id);
+            return new ResponseEntity<>(new RestResponse("All HiringEmployeeInfo's by Employee's id:'" + id + "' were deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/all")
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
-            return new ResponseEntity<>(new RestResponse("All HiringEmployeeInfo's deleted"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponse("All HiringEmployeeInfo's were deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

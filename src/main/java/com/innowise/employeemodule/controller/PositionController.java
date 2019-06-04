@@ -2,19 +2,16 @@ package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.config.DTO;
 import com.innowise.employeemodule.dto.PositionDTO.PositionCreationDTO;
+import com.innowise.employeemodule.dto.PositionDTO.PositionGetDTO;
+import com.innowise.employeemodule.dto.PositionDTO.PositionGetWitoutActiveDTO;
 import com.innowise.employeemodule.dto.PositionDTO.PositionUpdateDTO;
-import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.RestResponse;
-import com.innowise.employeemodule.service.EmployeeService;
 import com.innowise.employeemodule.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("position")
@@ -24,6 +21,7 @@ public class PositionController {
     private PositionService service;
 
     @GetMapping("/{id}")
+    @DTO(PositionGetWitoutActiveDTO.class)
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
@@ -33,6 +31,7 @@ public class PositionController {
     }
 
     @GetMapping("/all")
+    @DTO(PositionGetWitoutActiveDTO.class)
     public ResponseEntity<?> getAll() {
         try {
             return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
@@ -42,6 +41,7 @@ public class PositionController {
     }
 
     @GetMapping("/all-page")
+    @DTO(PositionGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -52,7 +52,7 @@ public class PositionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Position position) {
+    public ResponseEntity<?> create(@DTO(PositionCreationDTO.class) Position position) {
         try {
             return new ResponseEntity<>(service.add(position), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class PositionController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody Position position) {
+    public ResponseEntity<?> update(@DTO(PositionUpdateDTO.class) Position position) {
         try {
             return new ResponseEntity<>(service.update(position), HttpStatus.OK);
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class PositionController {
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
-            return new ResponseEntity<>(new RestResponse("All positions deleted"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponse("All positions were deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -112,6 +112,7 @@ public class PositionController {
     }
 
     @GetMapping("enable/all")
+    @DTO(PositionGetWitoutActiveDTO.class)
     public ResponseEntity<?> getEnableAll() {
         try {
             return new ResponseEntity<>(service.getEnableAll(), HttpStatus.OK);

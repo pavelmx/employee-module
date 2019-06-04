@@ -8,10 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class PersonalInfoGetDTO {
-
-    @Id
-    private Long id;
+public class PersonalInfoFullNameDTO {
 
     @NotNull
     private String firstName;
@@ -19,18 +16,5 @@ public class PersonalInfoGetDTO {
     @NotNull
     private String lastName;
 
-    @NotNull
-    private String adress;
 
-    @NotNull
-    private String email;
-
-    @NotNull
-    private String phoneNumber;
-
-    @NotNull
-    private String skype;
-
-    @NotNull
-    private String description;
 }

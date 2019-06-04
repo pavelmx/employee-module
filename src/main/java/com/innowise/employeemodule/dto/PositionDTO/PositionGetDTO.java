@@ -8,12 +8,16 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class PositionUpdateDTO {
+public class PositionGetDTO {
 
     @Id
+    @NotNull
     private Long id;
 
     @NotNull
     private String name;
+
+    @NotNull
+    private boolean isActive;
 
 }

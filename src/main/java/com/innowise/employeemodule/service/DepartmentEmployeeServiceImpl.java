@@ -1,7 +1,7 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.DepartmentEmployee;
-import com.innowise.employeemodule.entity.PositionEmployee;
+import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.repository.DepartmentEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,6 +37,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public DepartmentEmployee add(DepartmentEmployee departmentEmployee) {
+        departmentEmployee.setStartDateInDepartment(LocalDate.now());
         departmentEmployee.setCurrentDepartment(true);
         return repository.save(departmentEmployee);
     }
@@ -88,7 +90,6 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         DepartmentEmployee newDepartmentEmployee = new DepartmentEmployee();
         newDepartmentEmployee.setStartDateInDepartment(LocalDate.now());
         newDepartmentEmployee.setEmployee(oldDepartmentEmployee.getEmployee());
-        newDepartmentEmployee.setPositionEmployee(oldDepartmentEmployee.getPositionEmployee());
         newDepartmentEmployee.setDepartment(departmentService.getById(newdepartment_id));
         add(newDepartmentEmployee);
     }
@@ -103,4 +104,15 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         }
         return repository.findAll(pageable);
     }
+
+    @Override
+    public void deleteByEmployeeId(Long employee_id) {
+        List<DepartmentEmployee> departmentEmployees = new ArrayList<>();
+        departmentEmployees = getAllByEmployeeId(employee_id);
+        for (DepartmentEmployee departmentEmployee : departmentEmployees) {
+            deleteById(departmentEmployee.getId());
+        }
+    }
+
+
 }

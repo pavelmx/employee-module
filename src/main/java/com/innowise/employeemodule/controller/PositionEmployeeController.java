@@ -1,5 +1,8 @@
 package com.innowise.employeemodule.controller;
 
+import com.innowise.employeemodule.config.DTO;
+import com.innowise.employeemodule.dto.PositionEmployeeDTO.PositionEmployeeGetCurrentDTO;
+import com.innowise.employeemodule.dto.PositionEmployeeDTO.PositionEmployeeGetDTO;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.PositionEmployee;
@@ -78,13 +81,14 @@ public class PositionEmployeeController {
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
-            return new ResponseEntity<>(new RestResponse("All PositionEmployee's deleted"), HttpStatus.OK);
+            return new ResponseEntity<>(new RestResponse("All PositionEmployee's were deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/all-page")
+    @DTO(PositionEmployeeGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -104,6 +108,7 @@ public class PositionEmployeeController {
     }
 
     @GetMapping("current/{employee_id}")
+    @DTO(PositionEmployeeGetCurrentDTO.class)
     public ResponseEntity<?> getByEmployeeIdAndEndDateForPositionIsNull(@PathVariable Long employee_id) {
         try {
             return new ResponseEntity<>(service.getCurrentByEmployeeIdAndEndDateForPositionIsNull(employee_id), HttpStatus.OK);

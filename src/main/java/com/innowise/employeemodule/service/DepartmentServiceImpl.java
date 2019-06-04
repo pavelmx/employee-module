@@ -98,6 +98,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         } else {
             pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
         }
-        return repository.findAll(pageable);
+        return repository.findAll( pageable);
     }
 }

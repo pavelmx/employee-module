@@ -36,7 +36,6 @@
                 <constraints primaryKey="true" primaryKeyName="pk_department_employee_id" nullable="false"/>
             </column>
             <column name="employee_id" type="bigint"></column>
-            <column name="position_employee_id" type="bigint"></column>
             <column name="department_id" type="bigint"></column>
             <column name="is_current_department" type="boolean"></column>
             <column name="start_date_in_department" type="date"></column>
@@ -117,15 +116,6 @@
                 baseTableName="department_employee"
                 baseColumnNames="department_id"
                 referencedTableName="department"
-                referencedColumnNames="id"
-                onDelete="SET NULL"
-                onUpdate="CASCADE"/>
-
-        <addForeignKeyConstraint
-                constraintName="fk_dep_emp_position"
-                baseTableName="department_employee"
-                baseColumnNames="position_employee_id"
-                referencedTableName="position_employee"
                 referencedColumnNames="id"
                 onDelete="SET NULL"
                 onUpdate="CASCADE"/>

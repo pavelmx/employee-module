@@ -9,15 +9,9 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class EmployeeUpdateDTO {
+public class EmployeeIdDTO {
 
     @Id
-    @NotNull
     private Long id;
 
-    @NotNull
-    private boolean isActive;
-
-    @NotNull
-    private PersonalInfoUpdateDTO personalInfo;
 }

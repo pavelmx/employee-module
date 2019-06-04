@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,12 +30,18 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
     }
 
     @Override
+    public List<HiringEmployeeInfo> getByEmployeeId(Long employee_id) {
+        return repository.findByEmployee_Id(employee_id);
+    }
+
+    @Override
     public List<HiringEmployeeInfo> getAll() {
         return repository.findAll();
     }
 
     @Override
     public HiringEmployeeInfo add(HiringEmployeeInfo hiringEmployeeInfo) {
+        hiringEmployeeInfo.setDateOfHiring(LocalDate.now());
         return repository.save(hiringEmployeeInfo);
     }
 
@@ -52,6 +59,15 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
             throw new EntityNotFoundException("HiringEmployeeInfo with id: '" + id + "' not found");
         }
         repository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByEmployeeId(Long employee_id) {
+        List<HiringEmployeeInfo> hiringEmployeeInfos = new ArrayList<>();
+        hiringEmployeeInfos = getByEmployeeId(employee_id);
+        for (HiringEmployeeInfo hiringEmployeeInfo : hiringEmployeeInfos) {
+            deleteById(hiringEmployeeInfo.getId());
+        }
     }
 
     @Override

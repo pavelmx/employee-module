@@ -1,5 +1,6 @@
 package com.innowise.employeemodule.dto.EmployeeDTO;
 
+import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoGetDTO;
 import com.innowise.employeemodule.dto.PersonalInfoDTO.PersonalInfoUpdateDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,15 +10,14 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class EmployeeUpdateDTO {
+public class EmployeeGetDTO {
 
     @Id
-    @NotNull
     private Long id;
 
     @NotNull
     private boolean isActive;
 
     @NotNull
-    private PersonalInfoUpdateDTO personalInfo;
+    private PersonalInfoGetDTO personalInfo;
 }

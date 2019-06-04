@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,6 +42,7 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
 
     @Override
     public PositionEmployee add(PositionEmployee positionEmployee) {
+        positionEmployee.setStartDateForPosition(LocalDate.now());
         return repository.save(positionEmployee);
     }
 
@@ -93,9 +95,6 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
         newPositionEmployee.setPosition(positionService.getById(newposition_id));
         newPositionEmployee.setEmployee(oldPositionEmployee.getEmployee());
         add(newPositionEmployee);
-        DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
-        departmentEmployee.setPositionEmployee(newPositionEmployee);
-        departmentEmployeeService.update(departmentEmployee);
     }
 
     @Override
@@ -107,5 +106,14 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
             pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
         }
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public void deleteByEmployeeId(Long employee_id) {
+        List<PositionEmployee> positionEmployees = new ArrayList<>();
+        positionEmployees = getAllByEmployeeId(employee_id);
+        for (PositionEmployee positionEmployee : positionEmployees) {
+            deleteById(positionEmployee.getId());
+        }
     }
 }
