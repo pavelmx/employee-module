@@ -1,5 +1,112 @@
-<div>
-  <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add employee</button>
+<div class="row mb-3">
+  <div class="col">
+    <div>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add employee</button>
+    </div>
+    <div>
+        <button class="btn btn-primary" (click)="initFilter()">cccce</button>
+        <button class="btn btn-primary" (click)="resetFilter()">reset</button>
+      </div>
+  </div>
+  <div class="col">
+    <div>
+      <button class="btn btn-outline-primary" data-toggle="collapse" href="#filter">Filter</button>
+    </div>
+  </div>
+</div>
+<div class="collapse" id="filter">
+  <div class="card card-body">
+    <form #filter="ngForm" (change)="saveFilter()">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="firstNameFilter" [(ngModel)]="filter.firstName" #firstNameFilter="ngModel">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="lastNameFilter" [(ngModel)]="filter.lastName" #lastNameFilter="ngModel">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Skype</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="skypeFilter" [(ngModel)]="filter.skype" #skypeFilter="ngModel">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="emailFilter" [(ngModel)]="filter.email" #emailFilter="ngModel">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Phone number</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="phoneNumberFilter" [(ngModel)]="filter.phoneNumber" #phoneNumberFilter="ngModel">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Adress</label>
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="adressFilter" [(ngModel)]="filter.adress" #adressFilter="ngModel">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Description</label>{{filter.description}}
+            <input type="text" class="form-control" placeholder="(empty)"
+            name="descriptionFilter" [(ngModel)]="filter.description" #descriptionFilter="ngModel">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Position</label>
+            <select required class="custom-select "
+              [ngClass]="{'is-valid':position_id.valid && position_id.touched,'is-invalid':position_id.invalid && position_id.touched}">
+              <option *ngFor="let position of positionList" [ngValue]="position.id">{{position.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Department</label>
+            <select required class="custom-select" name="department_id" [(ngModel)]="form.department_id"
+              #department_id="ngModel"
+              [ngClass]="{'is-valid':department_id.valid && department_id.touched,'is-invalid':department_id.invalid && department_id.touched}">
+              <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Status {{filter.active}}</label><br>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-primary" (click)="filter.active='true'"
+              [ngClass]="{'active':filter.active=='true'}">Active</button>
+              <button type="button" class="btn btn-primary" (click)="filter.active=''"
+              [ngClass]="{'active':filter.active==''}">All</button>
+              <button type="button" class="btn btn-primary" (click)="filter.active='false'"
+              [ngClass]="{'active':filter.active=='false'}">Dismissed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 <br>
 <table class="table table-striped">
@@ -8,37 +115,37 @@
       <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">First name
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Last name
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="personalInfo.skype" (sort)="onSort($event)">Skype
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.skype', 'caret-up':order=='asc' && column=='personalInfo.skype'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="personalInfo.email" (sort)="onSort($event)">Email
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.email', 'caret-up':order=='asc' && column=='personalInfo.email'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="personalInfo.phoneNumber" (sort)="onSort($event)">Phone number
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.phoneNumber', 'caret-up':order=='asc' && column=='personalInfo.phoneNumber'}">
-    </span>
+        </span>
       </th>
       <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Active
-          <span class="caret-blank"
+        <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
-    </span>
+        </span>
       </th>
       <th scope="col">Operations</th>
     </tr>
@@ -51,11 +158,11 @@
       <td>{{employee.personalInfo.skype}}</td>
       <td>{{employee.personalInfo.email}}</td>
       <td>{{employee.personalInfo.phoneNumber}}</td>
-      <td>{{employee.active}} 
+      <td>{{employee.active}}
         <button *ngIf="employee.active===true" class="btn btn-danger ml-2"
           (click)="dismissEmployee(employee.id)">Dismiss</button>
-        <button *ngIf="employee.active===false" class="btn btn-primary ml-2"
-          data-toggle="modal" data-target="#recoveryModal" (click)="setEmployee(employee)">Recovery</button>
+        <button *ngIf="employee.active===false" class="btn btn-primary ml-2" data-toggle="modal"
+          data-target="#recoveryModal" (click)="setEmployee(employee)">Recovery</button>
       </td>
       <td>
         <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#infoModal"
@@ -67,16 +174,15 @@
 </table>
 
 <div class="d-flex justify-content-between ">
-    <ngb-pagination
-    (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+  <ngb-pagination (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
     [maxSize]="10" [rotate]="true" [boundaryLinks]="true">
-    </ngb-pagination>
-    <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
-        <option [ngValue]="5">5 items per page</option>
-        <option [ngValue]="15">15 items per page</option>
-        <option [ngValue]="30">30 items per page</option>
-      </select>
-  </div>
+  </ngb-pagination>
+  <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
+    <option [ngValue]="5">5 items per page</option>
+    <option [ngValue]="15">15 items per page</option>
+    <option [ngValue]="30">30 items per page</option>
+  </select>
+</div>
 
 <!-- add modal -->
 <div class="modal fade bd-example-modal-lg" id="addModal" tabindex="-1" role="dialog"
@@ -96,12 +202,12 @@
               <div class="form-group">
                 <input type="text" required class="form-control" placeholder="First name" name="firstName"
                   [(ngModel)]="form.firstName" #firstName="ngModel"
-                  [ngClass]="{'is-valid':firstName.valid && firstName.touched,'is-invalid':firstName.invalid && firstName.touched}" >
+                  [ngClass]="{'is-valid':firstName.valid && firstName.touched,'is-invalid':firstName.invalid && firstName.touched}">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
-                <input type="text" required class="form-control is-valid" placeholder="Last name" name="lastName"
+                <input type="text" required class="form-control" placeholder="Last name" name="lastName"
                   [(ngModel)]="form.lastName" #lastName="ngModel"
                   [ngClass]="{'is-valid':lastName.valid && lastName.touched,'is-invalid':lastName.invalid && lastName.touched}">
               </div>
@@ -110,14 +216,15 @@
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <input type="text" required class="form-control" placeholder="Email" name="email" [(ngModel)]="form.email"
-                  #email="ngModel" [ngClass]="{'is-valid':email.valid && email.touched,'is-invalid':email.invalid && email.touched}">
+                <input type="text" required class="form-control" placeholder="Email" name="email"
+                  [(ngModel)]="form.email" #email="ngModel"
+                  [ngClass]="{'is-valid':email.valid && email.touched,'is-invalid':email.invalid && email.touched}">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
                 <input type="text" required class="form-control" placeholder="Phone number" name="phoneNumber"
-                  [(ngModel)]="form.phoneNumber" #phoneNumber="ngModel" 
+                  [(ngModel)]="form.phoneNumber" #phoneNumber="ngModel"
                   [ngClass]="{'is-valid':phoneNumber.valid && phoneNumber.touched,'is-invalid':phoneNumber.invalid && phoneNumber.touched}">
               </div>
             </div>
@@ -129,8 +236,9 @@
             </div>
           </div>
           <div class="form-group">
-            <input type="text" required class="form-control " placeholder="Adress" name="adress" [(ngModel)]="form.adress"
-              #adress="ngModel" [ngClass]="{'is-valid':adress.valid && adress.touched,'is-invalid':adress.invalid && adress.touched}">
+            <input type="text" required class="form-control " placeholder="Adress" name="adress"
+              [(ngModel)]="form.adress" #adress="ngModel"
+              [ngClass]="{'is-valid':adress.valid && adress.touched,'is-invalid':adress.invalid && adress.touched}">
           </div>
           <div class="form-group">
             <textarea type="text" class="form-control " placeholder="Description" name="description"
@@ -141,8 +249,9 @@
             <div class="col">
               <div class="form-group">
                 <label for="position_id">Position</label>
-                <select required class="custom-select " name="position_id" [(ngModel)]="form.position_id" #position_id="ngModel"
-                    [ngClass]="{'is-valid':position_id.valid && position_id.touched,'is-invalid':position_id.invalid && position_id.touched}">
+                <select required class="custom-select " name="position_id" [(ngModel)]="form.position_id"
+                  #position_id="ngModel"
+                  [ngClass]="{'is-valid':position_id.valid && position_id.touched,'is-invalid':position_id.invalid && position_id.touched}">
                   <option *ngFor="let position of positionList" [ngValue]="position.id">{{position.name}}</option>
                 </select>
               </div>
@@ -151,7 +260,8 @@
               <div class="form-group">
                 <label for="department_id">Department</label>
                 <select required class="custom-select" name="department_id" [(ngModel)]="form.department_id"
-                  #department_id="ngModel" [ngClass]="{'is-valid':department_id.valid && department_id.touched,'is-invalid':department_id.invalid && department_id.touched}">
+                  #department_id="ngModel"
+                  [ngClass]="{'is-valid':department_id.valid && department_id.touched,'is-invalid':department_id.invalid && department_id.touched}">
                   <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}
                   </option>
                 </select>
@@ -162,8 +272,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" 
-          (click)="add(f)">Save</button>
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid" (click)="add(f)">Save</button>
       </div>
     </div>
   </div>
@@ -193,17 +302,17 @@
             <div class="col">
               <div class="form-group">
                 <label>First name</label>
-                <input type="text"  class="form-control" placeholder="First name" name="firstName2"
-                  [(ngModel)]="personalInfo.firstName" #firstName2="ngModel"
-                  required [ngClass]="{'is-valid':firstName2.valid ,'is-invalid':firstName2.invalid }">
+                <input type="text" class="form-control" placeholder="First name" name="firstName2"
+                  [(ngModel)]="personalInfo.firstName" #firstName2="ngModel" required
+                  [ngClass]="{'is-valid':firstName2.valid ,'is-invalid':firstName2.invalid }">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
                 <label>Last name</label>
                 <input type="text" class="form-control" placeholder="Last name" name="lastName2"
-                  [(ngModel)]="personalInfo.lastName" #lastName2="ngModel"
-                  required [ngClass]="{'is-valid':lastName2.valid ,'is-invalid':lastName2.invalid }">
+                  [(ngModel)]="personalInfo.lastName" #lastName2="ngModel" required
+                  [ngClass]="{'is-valid':lastName2.valid ,'is-invalid':lastName2.invalid }">
               </div>
             </div>
           </div>
@@ -212,16 +321,16 @@
               <div class="form-group">
                 <label>Email</label>
                 <input type="text" class="form-control" placeholder="Email" name="email2"
-                  [(ngModel)]="personalInfo.email" #email2="ngModel"
-                  required [ngClass]="{'is-valid':email2.valid ,'is-invalid':email2.invalid }">
+                  [(ngModel)]="personalInfo.email" #email2="ngModel" required
+                  [ngClass]="{'is-valid':email2.valid ,'is-invalid':email2.invalid }">
               </div>
             </div>
             <div class="col">
               <div class="form-group">
                 <label>Phone number</label>
                 <input type="text" class="form-control" placeholder="Phone number" name="phoneNumber2"
-                  [(ngModel)]="personalInfo.phoneNumber" #phoneNumber2="ngModel"
-                  required [ngClass]="{'is-valid':phoneNumber2.valid ,'is-invalid':phoneNumber2.invalid }">
+                  [(ngModel)]="personalInfo.phoneNumber" #phoneNumber2="ngModel" required
+                  [ngClass]="{'is-valid':phoneNumber2.valid ,'is-invalid':phoneNumber2.invalid }">
               </div>
             </div>
             <div class="col">
@@ -235,8 +344,8 @@
           <div class="form-group">
             <label>Adress</label>
             <input required type="text" class="form-control" placeholder="Adress" name="adress2"
-              [(ngModel)]="personalInfo.adress" #adress2="ngModel"
-              required [ngClass]="{'is-valid':adress2.valid ,'is-invalid':adress2.invalid }">
+              [(ngModel)]="personalInfo.adress" #adress2="ngModel" required
+              [ngClass]="{'is-valid':adress2.valid ,'is-invalid':adress2.invalid }">
           </div>
           <div class="form-group">
             <label>Description</label>
@@ -255,8 +364,8 @@
           </div>
           <div class="col">
             <button data-dismiss="editModal" class="btn btn-primary ml-2" data-toggle="modal"
-              data-target="#changePositionModal" (click)="setCurrentPosition(formedit.id)"
-              [disabled]="!active">Change position</button>
+              data-target="#changePositionModal" (click)="setCurrentPosition(formedit.id)" [disabled]="!active">Change
+              position</button>
           </div>
         </div>
         <div class="row">
@@ -270,15 +379,14 @@
           </div>
           <div class="col align-items-end">
             <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#changeDepartmentModal"
-              (click)="setCurrentDepartment(formedit.id)"
-              [disabled]="!active">Change department</button>
+              (click)="setCurrentDepartment(formedit.id)" [disabled]="!active">Change department</button>
           </div>
         </div>
         <div *ngIf="!active" class="alert alert-info ">Editing the data of the dismissed employee is impossible</div>
       </div>
-      
-      <div class="modal-footer"> 
-       
+
+      <div class="modal-footer">
+
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" [disabled]="!active"
           (click)="edit(fedit)">Update</button>
@@ -367,7 +475,8 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button [disabled]="formchange.currentDepartmentId==formchange.department_id" type="button"
-            class="btn btn-primary" [disabled]="fchangedepartment.form.invalid" (click)="changeDepartment()">Change</button>
+            class="btn btn-primary" [disabled]="fchangedepartment.form.invalid"
+            (click)="changeDepartment()">Change</button>
         </div>
       </div>
     </div>
@@ -375,13 +484,14 @@
 </div>
 
 <!-- recovery modal -->
- <div class="modal fade bd-example-modal-lg" id="recoveryModal" tabindex="-1" role="dialog" 
+<div class="modal fade bd-example-modal-lg" id="recoveryModal" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Recovery employee</h5>
-        <button #close_rec type="button" class="close" data-dismiss="modal" (click)="frecovery.resetForm()"  aria-label="Close">
+        <button #close_rec type="button" class="close" data-dismiss="modal" (click)="frecovery.resetForm()"
+          aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -391,9 +501,10 @@
             <div class="col">
               <div class="form-group">
                 <label for="department_id">Department</label>
-                <select required class="custom-select" name="rec_department_id" [(ngModel)]="formchange.rec_department_id"
-                  #rec_department_id="ngModel">
-                  <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}</option>
+                <select required class="custom-select" name="rec_department_id"
+                  [(ngModel)]="formchange.rec_department_id" #rec_department_id="ngModel">
+                  <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}
+                  </option>
                 </select>
               </div>
             </div>
@@ -409,10 +520,12 @@
           </div>
         </form>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="frecovery.resetForm()">Close</button>
-          <button type="button" class="btn btn-primary" [disabled]="frecovery.form.invalid" (click)="recoveryEmployee()" >Recovery</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="frecovery.resetForm()">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="frecovery.form.invalid"
+            (click)="recoveryEmployee()">Recovery</button>
         </div>
       </div>
     </div>
   </div>
-</div> 
+</div>

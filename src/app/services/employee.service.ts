@@ -3,6 +3,7 @@ import { PositionEmployee } from "../models/position-employee.model";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DepartmentEmployee } from '../models/department-employee.model';
+import { EmployeeFilter } from '../models/employee-filter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +27,9 @@ export class EmployeeService {
     return this.http.get<Employee[]>(this.getAllUrl);
   }
 
-  getPageableList(page: number, size: number, column: string, order: string) {
-    return this.http.get<Employee[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
-    + page + "&column=" + column + "&order=" + order);
+  getPageableList(page: number, size: number, column: string, order: string, filter: EmployeeFilter) {
+    return this.http.post<Employee[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order, filter);
   }
 
   getOne(id: any) {

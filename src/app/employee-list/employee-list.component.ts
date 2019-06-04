@@ -11,6 +11,8 @@ import { PositionEmployee } from '../models/position-employee.model';
 import { DepartmentEmployee } from '../models/department-employee.model';
 import { SortEvent, NgbdSortableHeader } from '../util/sortable.directive';
 import { ToastService } from '../util/toast.service';
+import { EmployeeFilter } from '../models/employee-filter.model';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -38,6 +40,7 @@ export class EmployeeListComponent implements OnInit {
   lastPage: number;
   currentEmployee: Employee;
   active: boolean = true;
+  filter: EmployeeFilter = new EmployeeFilter();
 
   @ViewChild('close_add') closeAddModal: ElementRef;
   @ViewChild('close_info') closeEditModal: ElementRef;
@@ -51,16 +54,54 @@ export class EmployeeListComponent implements OnInit {
     private employeeService: EmployeeService,
     private positionService: PositionService,
     private departmentService: DepartmentService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private storage: StorageService) { }
 
   ngOnInit() {
+    this.initFilter();
     this.initDepartmentList();
     this.initEmployeeList();
     this.initPositionList();
   }
 
-  initEmployeeList() {
-    this.employeeService.getPageableList(this.page, this.size, this.column, this.order)
+  initFilter(){
+    console.log("init filter")
+    this.filter.firstName = this.storage.getFirstName();
+    this.filter.lastName = this.storage.getLastName();
+    this.filter.adress = this.storage.getAdress();
+    this.filter.phoneNumber = this.storage.getPhoneNumber();
+    this.filter.skype = this.storage.getSkype();
+    this.filter.email = this.storage.getEmail();
+    this.filter.description = this.storage.getDescription();
+    this.filter.active = this.storage.getActive();
+    console.log(this.filter)    
+    //position
+    //department
+  }
+
+  resetFilter(){
+    this.storage.clearFilter();
+    this.initFilter();
+  }
+
+  saveFilter(){
+    console.log("save filter")
+    console.log(this.filter.description)
+    this.storage.setFirstName(this.filter.firstName);
+    this.storage.setLastName(this.filter.lastName);
+    this.storage.setAdress(this.filter.adress);
+    this.storage.setPhoneNumber(this.filter.phoneNumber);
+    this.storage.setSkype(this.filter.skype);
+    this.storage.setEmail(this.filter.email);
+    this.storage.setDescription(this.filter.description);
+    this.storage.setActive(this.filter.active);
+    //position
+    //department
+    this.initEmployeeList();
+  }
+
+  initEmployeeList() {   
+    this.employeeService.getPageableList(this.page, this.size, this.column, this.order, this.filter)
       .subscribe(
         response => {
           this.list = response['content']; 
@@ -273,8 +314,7 @@ export class EmployeeListComponent implements OnInit {
     this.page = 0;
     this.column = column;
     this.order = direction;
-    console.log(column)
-    console.log(direction)
+    
     this.initEmployeeList();
   }
 }

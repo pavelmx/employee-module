@@ -16,9 +16,8 @@ import { DepartmentEmployeeListComponent } from './department-employee-list/depa
 import { PositionEmployeeListComponent } from './position-employee-list/position-employee-list.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgbdSortableHeader } from './util/sortable.directive';
-import { ToasterModule } from 'angular2-toaster';
 import { ToastrModule } from 'ngx-toastr';
-
+import { StorageService } from './services/storage.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +43,7 @@ import { ToastrModule } from 'ngx-toastr';
     EmployeeService,
     CookieService,
     DepartmentService,
+    StorageService
   ],
   bootstrap: [AppComponent]
 })
