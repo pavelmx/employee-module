@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, ElementRef, PipeTransform } from '@angular/core';
 import { Department } from '../models/department.model';
 import { DepartmentService } from '../services/department.service';
 import { Employee } from '../models/employee.model';
@@ -7,6 +7,7 @@ import { NgForm, FormControl } from '@angular/forms';
 import { NgbdSortableHeader, SortEvent } from '../util/sortable.directive';
 import { ToastService } from '../util/toast.service';
 import { ToasterService, Toast } from 'angular2-toaster';
+import { DecimalPipe } from '@angular/common';
 
 
 
@@ -29,6 +30,10 @@ export class DepartmentListComponent implements OnInit {
   order: string = 'asc';
   checkOrder: boolean;
   errorMessage: string = '';
+  toggleAdd: boolean = false;
+  toggleEdit: boolean = false;
+  
+
 
   @ViewChild('close_add') closeAddModal: ElementRef;
   @ViewChild('close_edit') closeEditModal: ElementRef;
@@ -38,12 +43,24 @@ export class DepartmentListComponent implements OnInit {
     private departmentService: DepartmentService,
     private employeeService: EmployeeService,
     private toast: ToastService
-  ) {
-  }
+  ) { }
+  
 
   ngOnInit() {
     this.initDepartmentList();
     this.initEmployeeList();
+  }
+
+  compareFn(x: any, y:any): boolean{      
+    return x && y ? x.id == y.id: x == y;
+  }
+
+  toggleAddCheckBox(){
+    this.toggleAdd = !this.toggleAdd
+  }
+
+  toggleEditCheckBox(){
+    this.toggleEdit = !this.toggleEdit
   }
 
   initDepartmentList() {
@@ -67,7 +84,7 @@ export class DepartmentListComponent implements OnInit {
       .subscribe(
         response => {
           this.employeeList = response;
-          //console.log(this.employeeList);       
+              
         },
         error => {
           console.log(error);
@@ -79,7 +96,6 @@ export class DepartmentListComponent implements OnInit {
     this.departmentService.getOne(department.id)
       .subscribe(
         response => {
-          console.log(response);
           this.formedit = response;
         }
       );
@@ -88,6 +104,10 @@ export class DepartmentListComponent implements OnInit {
   add(form: NgForm) {
     var department = new Department();
     department = this.form;
+    console.log(this.form)
+    if(this.toggleAdd == true){
+      this.formedit.manager_id = undefined;
+    }
     this.departmentService.add(department, this.form.manager_id)
       .subscribe(
         response => {
@@ -107,10 +127,14 @@ export class DepartmentListComponent implements OnInit {
   edit(form: NgForm) {
     var department = new Department();
     department = this.formedit;
-    this.departmentService.edit(department, this.formedit.manager_id)
+    console.log(department)
+    if(this.toggleEdit == true){
+      this.formedit.manager.id = undefined;
+    }
+     this.departmentService.edit(department, this.formedit.manager.id)
       .subscribe(
-        response => {
-          console.log(response)
+        response => {      
+          console.log(response)    
           this.page = this.page;
           this.initDepartmentList();
           this.closeEditModal.nativeElement.click();

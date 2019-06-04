@@ -44,10 +44,10 @@ export class PositionService {
 
   disable(id: number){
     console.log(id)
-    return this.http.get<string>(this.disableUrl + id);
+    return this.http.get<any>(this.disableUrl + id);
   }
 
   enable(id: number){
-    return this.http.get<string>(this.enableUrl + id);
+    return this.http.get<any>(this.enableUrl + id);
   }
 }

@@ -2,6 +2,9 @@
   <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add department</button>
 </div>
 <br>
+
+
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -69,12 +72,15 @@
           </div>
           <div class="form-group">
             <label for="manager_id">Manager</label>
-            <select  class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel"
+            <select [disabled]="toggleAdd" required class="custom-select" name="manager_id" [(ngModel)]="form.manager_id" #manager_id="ngModel"
             [ngClass]="{'is-valid':manager_id.valid && manager_id.touched,'is-invalid':manager_id.invalid && manager_id.touched}" >               
-              <option [ngValue]="undefined" >Not assigned</option>
               <option *ngFor="let employee of employeeList" [ngValue]="employee.id">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck1" (click)="toggleAddCheckBox()">
+            <label class="custom-control-label" for="customCheck1">Without manager</label>
           </div>
         </form>
       </div>
@@ -108,14 +114,20 @@
             <input type="text" required class="form-control" placeholder="Name" name="name2" [(ngModel)]="formedit.name"
               #name2="ngModel" [ngClass]="{'is-valid':name2.valid,'is-invalid':name2.invalid }" >
           </div>
-          <div class="form-group">
+          
+          <div  class="form-group">
             <label for="manager_id">Manager</label>
-            <select  class="custom-select" name="manager_id2" [(ngModel)]="formedit.manager_id" #manager_id2="ngModel"
-            [ngClass]="{'is-valid':manager_id2.valid ,'is-invalid':manager_id2.invalid }">              
-            <option [ngValue]="undefined" >Not assigned</option>  
-            <option *ngFor="let employee of employeeList"  [ngValue]="employee.id">
+            <select required [compareWith]="compareFn" class="custom-select" name="manager_id2" [(ngModel)]="formedit.manager" #manager_id2="ngModel"
+            [ngClass]="{'is-valid':manager_id2.valid ,'is-invalid':manager_id2.invalid }"
+            [disabled]="toggleEdit">              
+        
+            <option *ngFor="let employee of employeeList"  [ngValue]="employee">
                 {{employee.personalInfo.firstName}} {{employee.personalInfo.lastName}}</option>
             </select>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck2" (click)="toggleEditCheckBox()">
+            <label class="custom-control-label" for="customCheck2">Without manager</label>
           </div>
         </form>
         

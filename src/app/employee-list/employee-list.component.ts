@@ -37,6 +37,7 @@ export class EmployeeListComponent implements OnInit {
   length: number;
   lastPage: number;
   currentEmployee: Employee;
+  active: boolean = true;
 
   @ViewChild('close_add') closeAddModal: ElementRef;
   @ViewChild('close_info') closeEditModal: ElementRef;
@@ -65,7 +66,6 @@ export class EmployeeListComponent implements OnInit {
           this.list = response['content']; 
         this.length = response['totalElements'];
         this.lastPage = response['totalPages']; 
-          console.log(this.list);
         },
         error => {
           console.log(error);
@@ -78,7 +78,6 @@ export class EmployeeListComponent implements OnInit {
       .subscribe(
         response => {
           this.positionList = response;
-          console.log(this.positionList);
         },
         error => {
           console.log(error);
@@ -91,7 +90,6 @@ export class EmployeeListComponent implements OnInit {
       .subscribe(
         response => {
           this.departmentList = response;
-          console.log(this.departmentList);
         },
         error => {
           console.log(error);
@@ -125,16 +123,19 @@ export class EmployeeListComponent implements OnInit {
   }
 
   setEditEmployee(employee: Employee) {
+    this.active = employee.active;
     this.employeeService.getOne(employee.id)
       .subscribe(
         response => {
           this.formedit = response;
           this.personalInfo = this.formedit.personalInfo;
+          
         }
       );
   }
 
   edit(form: NgForm) {
+    console.log(this.formedit)
     this.employeeService.edit(this.formedit)
       .subscribe(
         response => {
@@ -185,6 +186,7 @@ export class EmployeeListComponent implements OnInit {
 }
 
   setCurrentPosition(id: number) {
+    if(this.active){
     this.employeeService.getCurrentPositionEmployee(id)
       .subscribe(
         response => {
@@ -193,9 +195,12 @@ export class EmployeeListComponent implements OnInit {
           this.formchange.currentPositionName = this.currentPositionEmployee.position.name;
           this.formchange.currentEmployeeId = this.currentPositionEmployee.employee.id;
         },
-        error => {
+        error => {         
           console.log(error)
         });
+      }else{
+        this.formchange.currentPositionName = '';
+      }
   }
 
   changePosition() {
@@ -214,6 +219,8 @@ export class EmployeeListComponent implements OnInit {
   }
 
   setCurrentDepartment(id: number) {
+    console.log(this.active)
+    if(this.active){
     this.employeeService.getCurrentDepartmentEmployee(id)
       .subscribe(
         response => {
@@ -222,12 +229,15 @@ export class EmployeeListComponent implements OnInit {
           this.formchange.currentDepartmentName = this.currentDepartmentEmployee.department.name;
           this.formchange.currentEmployeeId = this.currentDepartmentEmployee.employee.id;
         },
-        error => {
+        error => {          
           console.log(error)
         });
+      }else{
+        this.formchange.currentDepartmentName = '';
+      }
   }
 
-  changeDepartment() {
+  changeDepartment() {   
     this.employeeService.changeDepartment(this.formchange.currentEmployeeId, this.formchange.department_id)
       .subscribe(
         response => {
@@ -240,6 +250,7 @@ export class EmployeeListComponent implements OnInit {
           console.log(error)
         }
       );
+    
   }
 
   onPageChange(pageNumber){   

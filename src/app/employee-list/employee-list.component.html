@@ -69,7 +69,7 @@
 <div class="d-flex justify-content-between ">
     <ngb-pagination
     (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
-    [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+    [maxSize]="10" [rotate]="true" [boundaryLinks]="true">
     </ngb-pagination>
     <select (click)="onSizeChange()" class="custom-select" style="width: auto" [(ngModel)]="size">
         <option [ngValue]="5">5 items per page</option>
@@ -256,7 +256,7 @@
           <div class="col">
             <button data-dismiss="editModal" class="btn btn-primary ml-2" data-toggle="modal"
               data-target="#changePositionModal" (click)="setCurrentPosition(formedit.id)"
-              [disabled]="!currentPositionEmployee">Change position</button>
+              [disabled]="!active">Change position</button>
           </div>
         </div>
         <div class="row">
@@ -271,14 +271,16 @@
           <div class="col align-items-end">
             <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#changeDepartmentModal"
               (click)="setCurrentDepartment(formedit.id)"
-              [disabled]="!currentDepartmentEmployee">Change department</button>
+              [disabled]="!active">Change department</button>
           </div>
         </div>
-
+        <div *ngIf="!active" class="alert alert-info ">Editing the data of the dismissed employee is impossible</div>
       </div>
-      <div class="modal-footer">
+      
+      <div class="modal-footer"> 
+       
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" 
+        <button type="button" class="btn btn-primary" [disabled]="fedit.form.invalid" [disabled]="!active"
           (click)="edit(fedit)">Update</button>
       </div>
     </div>
@@ -320,7 +322,7 @@
         </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button [disabled]="formchange.currentPositionId==formchange.position_id" type="button"
+          <button [disabled]="formchange.currentPositionId===formchange.position_id" type="button"
             class="btn btn-primary" [disabled]="fchangeposition.form.invalid" (click)="changePosition()">Change</button>
         </div>
       </div>

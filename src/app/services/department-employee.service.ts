@@ -11,9 +11,7 @@ export class DepartmentEmployeeService {
   
   constructor(private http: HttpClient) { }
 
-  getList() {
-    return this.http.get<DepartmentEmployee[]>(this.getAllUrl);
-  }
+  
 
   getPageableList(page: number, size: number, column: string, order: string) {
     return this.http.get<DepartmentEmployee[]>(this.getAllPageUrl + "?size=" + size + "&page=" 
