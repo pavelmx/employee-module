@@ -44,9 +44,7 @@ public class DepartmentController {
     @GetMapping("/all-page")
     @DTO(DepartmentGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
-                                        @RequestParam String column, @RequestParam String order
-                                      //  @QuerydslPredicate(root = Department.class) Predicate predicate
-    ) {
+                                        @RequestParam String column, @RequestParam String order) {
         try {
             return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
         } catch (Exception e) {

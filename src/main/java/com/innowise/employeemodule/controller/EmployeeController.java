@@ -6,16 +6,16 @@ import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeFullNameDTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeGetDTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeUpdateDTO;
 import com.innowise.employeemodule.entity.Employee;
-import com.innowise.employeemodule.entity.PersonalInfo;
+import com.innowise.employeemodule.entity.EmployeeFilter;
 import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.innowise.employeemodule.service.EmployeeService;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("employee")
@@ -87,12 +87,13 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/all-page")
+    @PostMapping("/all-page")
     @DTO(EmployeeGetDTO.class)
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
-                                        @RequestParam String column, @RequestParam String order) {
+                                        @RequestParam String column, @RequestParam String order,
+                                        @RequestBody EmployeeFilter employeeFilter) {
         try {
-            return new ResponseEntity<>(service.getAllPage(size, page, column, order), HttpStatus.OK);
+            return new ResponseEntity<>(service.getAllPage(size, page, column, order, employeeFilter), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

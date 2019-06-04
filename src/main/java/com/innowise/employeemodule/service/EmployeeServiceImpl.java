@@ -1,13 +1,17 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.*;
+import com.innowise.employeemodule.entity.QEmployee;
 import com.innowise.employeemodule.repository.EmployeeRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
@@ -160,15 +164,45 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<Employee> getAllPage(int size, int page, String column, String order) {
+    public Page<Employee> getAllPage(int size, int page, String column, String order, EmployeeFilter employeeFilter) {
         Pageable pageable;
         if (order.equals("")) {
             pageable = PageRequest.of(page, size);
         } else {
             pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
         }
-        return repository.findAll(pageable);
+        Predicate predicate = filterByEmployee(employeeFilter);
+        return repository.findAll(predicate, pageable);
     }
 
+    private Predicate filterByEmployee(EmployeeFilter employeeFilter) {
+        QEmployee qEmployee = QEmployee.employee;
+        BooleanBuilder predicate = new BooleanBuilder();
+        if (!StringUtils.isEmpty(employeeFilter.getActive())) {
+            predicate.and(qEmployee.isActive.eq(Boolean.valueOf(employeeFilter.getActive())));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getFirstName())) {
+            predicate.and(qEmployee.personalInfo.firstName.contains(employeeFilter.getFirstName()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getLastName())) {
+            predicate.and(qEmployee.personalInfo.lastName.contains(employeeFilter.getLastName()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getAdress())) {
+            predicate.and(qEmployee.personalInfo.adress.contains(employeeFilter.getAdress()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getSkype())) {
+            predicate.and(qEmployee.personalInfo.skype.contains(employeeFilter.getSkype()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getEmail())) {
+            predicate.and(qEmployee.personalInfo.email.contains(employeeFilter.getEmail()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getDescription())) {
+            predicate.and(qEmployee.personalInfo.description.contains(employeeFilter.getDescription()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getPhoneNumber())) {
+            predicate.and(qEmployee.personalInfo.phoneNumber.contains(employeeFilter.getPhoneNumber()));
+        }
+        return predicate;
+    }
 
 }
