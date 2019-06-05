@@ -15,6 +15,8 @@ public interface DepartmentEmployeeService extends AbstractService<DepartmentEmp
 
     List<DepartmentEmployee> getAllByEmployeeId(Long employee_id);
 
+    List<DepartmentEmployee> getAllByDepartmentId(Long department_id);
+
     void leaveDepartment(DepartmentEmployee departmentEmployee);
 
     Page<DepartmentEmployee> getAllPage(int size, int page, String column, String order);

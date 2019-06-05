@@ -13,6 +13,8 @@ public interface PositionEmployeeService extends AbstractService<PositionEmploye
 
     List<PositionEmployee> getAllByEmployeeId(Long employee_id);
 
+    List<PositionEmployee> getAllByPositionId(Long position_id);
+
     void leavePosition(PositionEmployee positionEmployee);
 
     Page<PositionEmployee> getAllPage(int size, int page, String column, String order);

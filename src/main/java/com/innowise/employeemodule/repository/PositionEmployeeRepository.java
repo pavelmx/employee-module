@@ -14,4 +14,5 @@ public interface PositionEmployeeRepository extends JpaRepository<PositionEmploy
 
     List<PositionEmployee> findByEmployee_Id(Long id);
 
+    List<PositionEmployee> findByPosition_IdAndEndDateForPositionIsNull(Long id);
 }

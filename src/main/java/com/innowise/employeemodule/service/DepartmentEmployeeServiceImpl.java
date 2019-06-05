@@ -70,6 +70,12 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     }
 
     @Override
+    public List<DepartmentEmployee> getAllByDepartmentId(Long department_id){
+        List<DepartmentEmployee> departmentEmployeeList = repository.findByDepartment_IdAndIsCurrentDepartmentTrue(department_id);
+        return departmentEmployeeList;
+    }
+
+    @Override
     public DepartmentEmployee getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id){
         DepartmentEmployee departmentEmployee = repository.findByEmployee_IdAndIsCurrentDepartmentTrue(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("DepartmentEmployee by employee's id: '" + employee_id + "' where IsCurrentDepartment = true not found"));

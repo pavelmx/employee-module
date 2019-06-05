@@ -1,7 +1,7 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.Employee;
-import com.innowise.employeemodule.entity.EmployeeFilter;
+import com.innowise.employeemodule.entity.filter.EmployeeFilter;
 import org.springframework.data.domain.Page;
 
 

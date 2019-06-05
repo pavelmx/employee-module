@@ -16,7 +16,6 @@ public interface AbstractRepository<E extends AbstractEntity, N extends Serializ
         QuerydslPredicateExecutor<E>, QuerydslBinderCustomizer<Q> {
 
     @Override
-    public default void customize(final QuerydslBindings bindings, final Q q) {
-        bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
+    default void customize(final QuerydslBindings bindings, final Q q) {
     }
 }

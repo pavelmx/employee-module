@@ -13,4 +13,6 @@ public interface DepartmentEmployeeRepository extends JpaRepository<DepartmentEm
     Optional<DepartmentEmployee> findByEmployee_IdAndIsCurrentDepartmentTrue(Long id);
 
     List<DepartmentEmployee> findByEmployee_Id(Long id);
+
+    List<DepartmentEmployee> findByDepartment_IdAndIsCurrentDepartmentTrue(Long id);
 }

@@ -2,8 +2,10 @@ package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.entity.QEmployee;
+import com.innowise.employeemodule.entity.filter.EmployeeFilter;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.CollectionExpression;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +17,9 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -182,27 +186,52 @@ public class EmployeeServiceImpl implements EmployeeService {
             predicate.and(qEmployee.isActive.eq(Boolean.valueOf(employeeFilter.getActive())));
         }
         if (!StringUtils.isEmpty(employeeFilter.getFirstName())) {
-            predicate.and(qEmployee.personalInfo.firstName.contains(employeeFilter.getFirstName()));
+            predicate.and(qEmployee.personalInfo.firstName.containsIgnoreCase(employeeFilter.getFirstName()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getLastName())) {
-            predicate.and(qEmployee.personalInfo.lastName.contains(employeeFilter.getLastName()));
+            predicate.and(qEmployee.personalInfo.lastName.containsIgnoreCase(employeeFilter.getLastName()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getAdress())) {
-            predicate.and(qEmployee.personalInfo.adress.contains(employeeFilter.getAdress()));
+            predicate.and(qEmployee.personalInfo.adress.containsIgnoreCase(employeeFilter.getAdress()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getSkype())) {
-            predicate.and(qEmployee.personalInfo.skype.contains(employeeFilter.getSkype()));
+            predicate.and(qEmployee.personalInfo.skype.containsIgnoreCase(employeeFilter.getSkype()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getEmail())) {
-            predicate.and(qEmployee.personalInfo.email.contains(employeeFilter.getEmail()));
+            predicate.and(qEmployee.personalInfo.email.containsIgnoreCase(employeeFilter.getEmail()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getDescription())) {
-            predicate.and(qEmployee.personalInfo.description.contains(employeeFilter.getDescription()));
+            predicate.and(qEmployee.personalInfo.description.containsIgnoreCase(employeeFilter.getDescription()));
         }
         if (!StringUtils.isEmpty(employeeFilter.getPhoneNumber())) {
-            predicate.and(qEmployee.personalInfo.phoneNumber.contains(employeeFilter.getPhoneNumber()));
+            predicate.and(qEmployee.personalInfo.phoneNumber.containsIgnoreCase(employeeFilter.getPhoneNumber()));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getPositionId())) {
+            predicate.and(qEmployee.id.in(listPositionEmployeeIds(Long.valueOf(employeeFilter.getPositionId()))));
+        }
+        if (!StringUtils.isEmpty(employeeFilter.getDepartmentId())) {
+            predicate.and(qEmployee.id.in(listDepartmentEmployeeIds(Long.valueOf(employeeFilter.getDepartmentId()))));
         }
         return predicate;
     }
 
+    private Set<Long> listPositionEmployeeIds(Long position_id){
+        Set<Long> employeeIdsList = new HashSet<>();
+        List<PositionEmployee> positionEmployeeList = positionEmployeeService.getAllByPositionId(position_id);
+        for (PositionEmployee positionEmployee: positionEmployeeList) {
+            long employeeId = positionEmployee.getEmployee().getId();
+            employeeIdsList.add(employeeId);
+        }
+        return employeeIdsList;
+    }
+
+    private Set<Long> listDepartmentEmployeeIds(Long department_id){
+        Set<Long> employeeIdsList = new HashSet<>();
+        List<DepartmentEmployee> departmentEmployeeList = departmentEmployeeService.getAllByDepartmentId(department_id);
+        for (DepartmentEmployee departmentEmployee: departmentEmployeeList) {
+            long employeeId = departmentEmployee.getEmployee().getId();
+            employeeIdsList.add(employeeId);
+        }
+        return employeeIdsList;
+    }
 }

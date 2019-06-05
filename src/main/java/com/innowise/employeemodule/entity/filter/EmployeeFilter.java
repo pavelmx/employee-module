@@ -1,7 +1,9 @@
-package com.innowise.employeemodule.entity;
+package com.innowise.employeemodule.entity.filter;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.PrimitiveIterator;
 
 @Getter
 @Setter
@@ -15,4 +17,6 @@ public class EmployeeFilter {
     private String email;
     private String description;
     private String active;
+    private String positionId;
+    private String departmentId;
 }
