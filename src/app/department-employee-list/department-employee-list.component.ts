@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { DepartmentEmployee } from '../models/department-employee.model';
 import { DepartmentEmployeeService } from '../services/department-employee.service';
 import { NgbdSortableHeader, SortEvent } from '../util/sortable.directive';
+import { from } from 'rxjs';
+
 
 @Component({
   selector: 'app-department-employee-list',
@@ -30,6 +32,8 @@ export class DepartmentEmployeeListComponent implements OnInit {
     this.initDepartmentEmployee();
   }
 
+
+  
   initDepartmentEmployee() {
     this.departmentEmployeeService.getPageableList(this.page, this.size, this.column, this.order)
       .subscribe(

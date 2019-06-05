@@ -8,4 +8,6 @@ export class EmployeeFilter {
     email: string;
     description: string;
     active: string;
+    positionId: string;
+    departmentId: string;
   }

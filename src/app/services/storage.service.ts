@@ -8,8 +8,8 @@ const ACTIVE = 'ACTIVE';
 const EMAIL = 'EMAIL';
 const PHONE_NUMBER = 'PHONE_NUMBER';
 const DESCRIPTION = 'DESCRIPTION';
-const POSITION = 'POSITION';
-const DEPARTMENT = 'DEPARTMENT';
+const POSITION_ID = 'POSITION_ID';
+const DEPARTMENT_ID = 'DEPARTMENT_ID';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,15 @@ const DEPARTMENT = 'DEPARTMENT';
 export class StorageService {
 
   constructor() { 
+   this.init();
+   }
+
+  clearFilter() {
+    sessionStorage.clear();
+  }
+
+  
+  public init(){
     this.setActive('');
     this.setAdress('');
     this.setDepartment('');
@@ -27,10 +36,6 @@ export class StorageService {
     this.setLastName('');
     this.setPhoneNumber('');
     this.setPosition('');   
-   }
-
-  clearFilter() {
-    window.localStorage.clear();
   }
 
   public setFirstName(field: string) {
@@ -97,25 +102,24 @@ export class StorageService {
   }
 
   public setPosition(field: string) {
-    window.sessionStorage.removeItem(POSITION);
-    window.sessionStorage.setItem(POSITION, field);
+    window.sessionStorage.removeItem(POSITION_ID);
+    window.sessionStorage.setItem(POSITION_ID, field);
   }
 
   public getPosition(): string {
-    return sessionStorage.getItem(POSITION);
+    return sessionStorage.getItem(POSITION_ID);
   }
 
   public setDepartment(field: string) {
-    window.sessionStorage.removeItem(DEPARTMENT);
-    window.sessionStorage.setItem(DEPARTMENT, field);
+    window.sessionStorage.removeItem(DEPARTMENT_ID);
+    window.sessionStorage.setItem(DEPARTMENT_ID, field);
   }
 
   public getDepartment(): string {
-    return sessionStorage.getItem(DEPARTMENT);
+    return sessionStorage.getItem(DEPARTMENT_ID);
   }
 
-  public setDescription(field: string) {
-    console.log(field)
+  public setDescription(field: string) {   
     window.sessionStorage.removeItem(DESCRIPTION);
     window.sessionStorage.setItem(DESCRIPTION, field);
   }

@@ -40,7 +40,7 @@ export class EmployeeListComponent implements OnInit {
   lastPage: number;
   currentEmployee: Employee;
   active: boolean = true;
-  filter: EmployeeFilter = new EmployeeFilter();
+  filter: any={};
 
   @ViewChild('close_add') closeAddModal: ElementRef;
   @ViewChild('close_info') closeEditModal: ElementRef;
@@ -74,19 +74,18 @@ export class EmployeeListComponent implements OnInit {
     this.filter.email = this.storage.getEmail();
     this.filter.description = this.storage.getDescription();
     this.filter.active = this.storage.getActive();
-    console.log(this.filter)    
-    //position
-    //department
+    this.filter.departmentId = this.storage.getDepartment();
+    this.filter.positionId = this.storage.getPosition();
+  
   }
 
   resetFilter(){
-    this.storage.clearFilter();
+    this.storage.init();
     this.initFilter();
+    this.initEmployeeList();
   }
 
-  saveFilter(){
-    console.log("save filter")
-    console.log(this.filter.description)
+  saveFilter(){    
     this.storage.setFirstName(this.filter.firstName);
     this.storage.setLastName(this.filter.lastName);
     this.storage.setAdress(this.filter.adress);
@@ -95,8 +94,9 @@ export class EmployeeListComponent implements OnInit {
     this.storage.setEmail(this.filter.email);
     this.storage.setDescription(this.filter.description);
     this.storage.setActive(this.filter.active);
-    //position
-    //department
+    this.storage.setDepartment(this.filter.departmentId);
+    this.storage.setPosition(this.filter.positionId);
+    console.log(this.storage.getPosition())  
     this.initEmployeeList();
   }
 
