@@ -2,6 +2,8 @@ package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.entity.QEmployee;
+import com.innowise.employeemodule.entity.candidate.DepartmentCandidate;
+import com.innowise.employeemodule.entity.candidate.EmployeeCandidate;
 import com.innowise.employeemodule.entity.filter.EmployeeFilter;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -17,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +57,32 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<Employee> getAllActive() {
+        return repository.findByIsActiveTrue();
+    }
+
+    @Override
+    public List<EmployeeCandidate> getAllActiveEmployeeCandidates(){
+        List<EmployeeCandidate> employeeCandidateList = new ArrayList<>();
+        List<Employee> employeeList = getAllActive();
+        for (int i = 0; i < employeeList.size(); i++) {
+            PersonalInfo personalInfo = employeeList.get(i).getPersonalInfo();
+            DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employeeList.get(i).getId());
+            Department department = departmentEmployee.getDepartment();
+            DepartmentCandidate departmentCandidate = new DepartmentCandidate();
+            departmentCandidate.setDepartmentName(department.getName());
+            EmployeeCandidate employeeCandidate = new EmployeeCandidate();
+            employeeCandidate.setFirstName(personalInfo.getFirstName());
+            employeeCandidate.setLastName(personalInfo.getLastName());
+            employeeCandidate.setDepartment(departmentCandidate);
+            System.out.println(employeeCandidate);
+            employeeCandidateList.add(employeeCandidate);
+        }
+
+        return  employeeCandidateList;
     }
 
     @Override

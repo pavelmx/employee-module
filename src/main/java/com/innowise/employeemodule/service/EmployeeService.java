@@ -1,11 +1,18 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.Employee;
+import com.innowise.employeemodule.entity.candidate.EmployeeCandidate;
 import com.innowise.employeemodule.entity.filter.EmployeeFilter;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 
 public interface EmployeeService extends AbstractService<Employee> {
+
+    List<Employee> getAllActive();
+
+    List<EmployeeCandidate> getAllActiveEmployeeCandidates();
 
     void dismissEmployee(Long id);
 

@@ -46,6 +46,25 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/active")
+    @DTO(EmployeeFullNameDTO.class)
+    public ResponseEntity<?> getAllActive() {
+        try {
+            return new ResponseEntity<>(service.getAllActive(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/candidate/active")
+    public ResponseEntity<?> getAllActiveForCandidateModule() {
+        try {
+            return new ResponseEntity<>(service.getAllActiveEmployeeCandidates(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@DTO(EmployeeCreationDTO.class) Employee employee,
                                     @RequestParam Long position_id, @RequestParam Long department_id) {
