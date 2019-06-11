@@ -8,6 +8,7 @@ import com.innowise.employeemodule.dto.PositionDTO.PositionUpdateDTO;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.PositionService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class PositionController {
 
     @GetMapping("/{id}")
     @DTO(PositionGetWitoutActiveDTO.class)
+    @ApiOperation(value = "Find Position by id")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
@@ -32,6 +34,7 @@ public class PositionController {
 
     @GetMapping("/all")
     @DTO(PositionGetWitoutActiveDTO.class)
+    @ApiOperation(value = "Find all Positions")
     public ResponseEntity<?> getAll() {
         try {
             return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
@@ -42,6 +45,7 @@ public class PositionController {
 
     @GetMapping("/all-page")
     @DTO(PositionGetDTO.class)
+    @ApiOperation(value = "Get all pages of Positions")
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -52,6 +56,7 @@ public class PositionController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create new Position")
     public ResponseEntity<?> create(@DTO(PositionCreationDTO.class) Position position) {
         try {
             return new ResponseEntity<>(service.add(position), HttpStatus.CREATED);
@@ -61,6 +66,7 @@ public class PositionController {
     }
 
     @PutMapping
+    @ApiOperation(value = "Update Position")
     public ResponseEntity<?> update(@DTO(PositionUpdateDTO.class) Position position) {
         try {
             return new ResponseEntity<>(service.update(position), HttpStatus.OK);
@@ -70,6 +76,7 @@ public class PositionController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete Position by id")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             service.deleteById(id);
@@ -80,6 +87,7 @@ public class PositionController {
     }
 
     @DeleteMapping("/all")
+    @ApiOperation(value = "Delete all Positions")
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
@@ -90,6 +98,7 @@ public class PositionController {
     }
 
     @GetMapping("disable/{id}")
+    @ApiOperation(value = "Disable Position by id")
     public ResponseEntity<?> disablePositionById(@PathVariable("id") Long id) {
         try {
             Position position = service.getById(id);
@@ -101,6 +110,7 @@ public class PositionController {
     }
 
     @GetMapping("enable/{id}")
+    @ApiOperation(value = "Enable Position by id")
     public ResponseEntity<?> enablePositionById(@PathVariable("id") Long id) {
         try {
             Position position = service.getById(id);
@@ -113,6 +123,7 @@ public class PositionController {
 
     @GetMapping("enable/all")
     @DTO(PositionGetWitoutActiveDTO.class)
+    @ApiOperation(value = "Find all enable Positions")
     public ResponseEntity<?> getEnableAll() {
         try {
             return new ResponseEntity<>(service.getEnableAll(), HttpStatus.OK);

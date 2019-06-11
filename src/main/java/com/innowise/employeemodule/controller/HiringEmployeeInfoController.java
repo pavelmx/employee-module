@@ -7,6 +7,7 @@ import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.HiringEmployeeInfoService;
 import com.innowise.employeemodule.service.PositionService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class HiringEmployeeInfoController {
     private HiringEmployeeInfoService service;
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "Find HiringEmployeeInfo by id")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
@@ -32,6 +34,7 @@ public class HiringEmployeeInfoController {
     }
 
     @GetMapping("employee/{id}")
+    @ApiOperation(value = "Find all HiringEmployeeInfos by employee's id")
     public ResponseEntity<?> getByEmployeeId(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<>(service.getByEmployeeId(id), HttpStatus.OK);
@@ -41,6 +44,7 @@ public class HiringEmployeeInfoController {
     }
 
     @GetMapping("/all")
+    @ApiOperation(value = "Find all HiringEmployeeInfos")
     public ResponseEntity<?> getAll() {
         try {
             return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
@@ -51,6 +55,7 @@ public class HiringEmployeeInfoController {
 
     @GetMapping("/all-page")
     @DTO(HiringEmployeeInfoGetDTO.class)
+    @ApiOperation(value = "Get all pages of HiringEmployeeInfos")
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -61,6 +66,7 @@ public class HiringEmployeeInfoController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create new HiringEmployeeInfo")
     public ResponseEntity<?> create(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
         try {
             return new ResponseEntity<>(service.add(hiringEmployeeInfo), HttpStatus.CREATED);
@@ -70,6 +76,7 @@ public class HiringEmployeeInfoController {
     }
 
     @PutMapping
+    @ApiOperation(value = "Update HiringEmployeeInfo")
     public ResponseEntity<?> update(@RequestBody HiringEmployeeInfo hiringEmployeeInfo) {
         try {
             return new ResponseEntity<>(service.update(hiringEmployeeInfo), HttpStatus.OK);
@@ -79,6 +86,7 @@ public class HiringEmployeeInfoController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete HiringEmployeeInfo by id")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             service.deleteById(id);
@@ -89,6 +97,7 @@ public class HiringEmployeeInfoController {
     }
 
     @DeleteMapping("employee/{id}")
+    @ApiOperation(value = "Delete all HiringEmployeeInfos by employee's id")
     public ResponseEntity<?> deleteByEmployeeId(@PathVariable Long id) {
         try {
             service.deleteByEmployeeId(id);
@@ -99,6 +108,7 @@ public class HiringEmployeeInfoController {
     }
 
     @DeleteMapping("/all")
+    @ApiOperation(value = "Delete all HiringEmployeeInfos")
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();

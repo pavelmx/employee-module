@@ -9,6 +9,7 @@ import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeFullNameDTO;
 import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.RestResponse;
 import com.innowise.employeemodule.service.DepartmentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     @DTO(DepartmentGetDTO.class)
+    @ApiOperation(value = "Find Department by id")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
@@ -33,6 +35,7 @@ public class DepartmentController {
 
     @GetMapping("/all")
     @DTO(DepartmentGetWitoutManagerDTO.class)
+    @ApiOperation(value = "Find all Departments")
     public ResponseEntity<?> getAll() {
         try {
             return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
@@ -43,6 +46,7 @@ public class DepartmentController {
 
     @GetMapping("/all-page")
     @DTO(DepartmentGetDTO.class)
+    @ApiOperation(value = "Get all pages of Departments")
     public ResponseEntity<?> getAllPage(@RequestParam int size, @RequestParam int page,
                                         @RequestParam String column, @RequestParam String order) {
         try {
@@ -53,6 +57,7 @@ public class DepartmentController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create new Department with manager's id")
     public ResponseEntity<?> create(@DTO(DepartmentCreationDTO.class) Department department, @RequestParam Long manager_id) {
         try {
             return new ResponseEntity<>(service.create(department, manager_id), HttpStatus.CREATED);
@@ -62,6 +67,7 @@ public class DepartmentController {
     }
 
     @PutMapping
+    @ApiOperation(value = "Update Department with manager's id")
     public ResponseEntity<?> update(@DTO(DepartmentUpdateDTO.class) Department department, @RequestParam Long manager_id) {
         try {
             return new ResponseEntity<>(service.edit(department, manager_id), HttpStatus.OK);
@@ -71,6 +77,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete Department by id")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             service.deleteById(id);
@@ -81,6 +88,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/all")
+    @ApiOperation(value = "Delete all Departments")
     public ResponseEntity<?> deleteAll() {
         try {
             service.deleteAll();
