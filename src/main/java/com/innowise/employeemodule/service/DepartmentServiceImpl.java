@@ -3,6 +3,7 @@ package com.innowise.employeemodule.service;
 import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.repository.DepartmentRepository;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +12,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +28,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     private EmployeeService employeeService;
+
+    private SessionFactory hibernateFactory;
+
+    @Autowired
+    public DepartmentServiceImpl(EntityManagerFactory factory) {
+        if(factory.unwrap(SessionFactory.class) == null){
+            throw new NullPointerException("factory is not a hibernate factory");
+        }
+        this.hibernateFactory = factory.unwrap(SessionFactory.class);
+    }
 
     @Override
     public Department getById(Long id) {
@@ -100,4 +116,5 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return repository.findAll( pageable);
     }
+
 }

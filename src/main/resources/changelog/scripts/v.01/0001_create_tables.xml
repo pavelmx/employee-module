@@ -37,9 +37,10 @@
             </column>
             <column name="employee_id" type="bigint"></column>
             <column name="department_id" type="bigint"></column>
+            <column name="description" type="varchar(255)"></column>
             <column name="is_current_department" type="boolean"></column>
-            <column name="start_date_in_department" type="date"></column>
-            <column name="end_date_in_department" type="date"></column>
+            <column name="start_date_in_department" type="timestamp"></column>
+            <column name="end_date_in_department" type="timestamp"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
@@ -52,8 +53,9 @@
             </column>
             <column name="employee_id" type="bigint"></column>
             <column name="position_id" type="bigint"></column>
-            <column name="start_date_for_position" type="date"></column>
-            <column name="end_date_for_position" type="date"></column>
+            <column name="description" type="varchar(255)"></column>
+            <column name="start_date_for_position" type="timestamp"></column>
+            <column name="end_date_for_position" type="timestamp"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>

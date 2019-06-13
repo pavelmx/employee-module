@@ -1,7 +1,8 @@
-package com.innowise.employeemodule.dto.DepartmentEmployeeDTO;
+package com.innowise.employeemodule.dto.DepartmentPositionDTO;
 
 import com.innowise.employeemodule.dto.DepartmentDTO.DepartmentGetWitoutManagerDTO;
 import com.innowise.employeemodule.dto.EmployeeDTO.EmployeeFullNameDTO;
+import com.innowise.employeemodule.dto.PositionDTO.PositionGetDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class DepartmentEmployeeGetDTO {
+public class DepartmentPositionDTO {
 
     @Id
     @NotNull
@@ -22,14 +23,14 @@ public class DepartmentEmployeeGetDTO {
     private EmployeeFullNameDTO employee;
 
     @NotNull
+    private PositionGetDTO position;
+
+    @NotNull
     private DepartmentGetWitoutManagerDTO department;
 
     private String description;
 
-    private LocalDate startDateInDepartment;
+    private LocalDate startDate;
 
-    private LocalDate endDateInDepartment;
-
-    @NotNull
-    private boolean isCurrentDepartment;
+    private LocalDate endDate;
 }

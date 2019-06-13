@@ -118,9 +118,9 @@ public class PositionEmployeeController {
     }
 
     @GetMapping("change")
-    public ResponseEntity<?> changePosition(@RequestParam Long employee_id, @RequestParam Long newposition_id) {
+    public ResponseEntity<?> changePosition(@RequestParam Long employee_id, @RequestParam Long newposition_id, @RequestParam String description) {
         try {
-            service.changePosition(employee_id, newposition_id);
+            service.changePosition(employee_id, newposition_id, description);
             Position position = positionService.getById(newposition_id);
             Employee employee = employeeService.getById(employee_id);
             return new ResponseEntity<>(new RestResponse("Employee '" + employee.getPersonalInfo().getFirstName() + " "

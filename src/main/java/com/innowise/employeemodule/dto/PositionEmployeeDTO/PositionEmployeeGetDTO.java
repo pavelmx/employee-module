@@ -25,6 +25,8 @@ public class PositionEmployeeGetDTO {
     @NotNull
     private PositionGetDTO position;
 
+    private String description;
+
     private LocalDate startDateForPosition;
 
     private LocalDate endDateForPosition;

@@ -49,6 +49,7 @@
             <column name="id" value="1" />
             <column name="employee_id" value="1"/>
             <column name="position_id" value="1"/>
+            <column name="description" value="Description for position change"/>
             <column name="start_date_for_position" value="2019-05-06"/>
         </insert>
     </changeSet>
@@ -58,6 +59,7 @@
             <column name="id" value="1" />
             <column name="employee_id" value="1"/>
             <column name="department_id" value="1"/>
+            <column name="description" value="Description for department change"/>
             <column name="is_current_department" value="true"/>
             <column name="start_date_in_department" value="2019-05-05"/>
         </insert>

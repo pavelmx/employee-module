@@ -2,6 +2,7 @@ package com.innowise.employeemodule.repository;
 
 import com.innowise.employeemodule.entity.DepartmentEmployee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface DepartmentEmployeeRepository extends JpaRepository<DepartmentEm
     List<DepartmentEmployee> findByEmployee_Id(Long id);
 
     List<DepartmentEmployee> findByDepartment_IdAndIsCurrentDepartmentTrue(Long id);
+
 }

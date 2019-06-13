@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
 
     @Override
     public PositionEmployee add(PositionEmployee positionEmployee) {
-        positionEmployee.setStartDateForPosition(LocalDate.now());
+        positionEmployee.setStartDateForPosition(LocalDateTime.now());
         return repository.save(positionEmployee);
     }
 
@@ -88,18 +89,19 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
 
     @Override
     public void leavePosition(PositionEmployee positionEmployee){
-        positionEmployee.setEndDateForPosition(LocalDate.now());
+        positionEmployee.setEndDateForPosition(LocalDateTime.now());
         update(positionEmployee);
     }
 
     @Override
-    public void changePosition(Long employee_id, Long newposition_id) {
+    public void changePosition(Long employee_id, Long newposition_id, String description) {
         PositionEmployee oldPositionEmployee = getCurrentByEmployeeIdAndEndDateForPositionIsNull(employee_id);
         leavePosition(oldPositionEmployee);
         PositionEmployee newPositionEmployee = new PositionEmployee();
-        newPositionEmployee.setStartDateForPosition(LocalDate.now());
+        newPositionEmployee.setStartDateForPosition(LocalDateTime.now());
         newPositionEmployee.setPosition(positionService.getById(newposition_id));
         newPositionEmployee.setEmployee(oldPositionEmployee.getEmployee());
+        newPositionEmployee.setDescription(description);
         add(newPositionEmployee);
     }
 

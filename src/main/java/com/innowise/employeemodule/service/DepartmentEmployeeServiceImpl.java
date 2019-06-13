@@ -1,8 +1,10 @@
 package com.innowise.employeemodule.service;
 
+import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.DepartmentEmployee;
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.repository.DepartmentEmployeeRepository;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,9 +12,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +31,9 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Autowired
     private DepartmentService departmentService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public DepartmentEmployee getById(Long id) {
@@ -37,7 +48,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public DepartmentEmployee add(DepartmentEmployee departmentEmployee) {
-        departmentEmployee.setStartDateInDepartment(LocalDate.now());
+        departmentEmployee.setStartDateInDepartment(LocalDateTime.now());
         departmentEmployee.setCurrentDepartment(true);
         return repository.save(departmentEmployee);
     }
@@ -85,18 +96,19 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     @Override
     public void leaveDepartment(DepartmentEmployee departmentEmployee){
         departmentEmployee.setCurrentDepartment(false);
-        departmentEmployee.setEndDateInDepartment(LocalDate.now());
+        departmentEmployee.setEndDateInDepartment(LocalDateTime.now());
         update(departmentEmployee);
     }
 
     @Override
-    public void changeDepartment(Long newdepartment_id, Long employee_id){
+    public void changeDepartment(Long newdepartment_id, Long employee_id, String description){
         DepartmentEmployee oldDepartmentEmployee = getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employee_id);
         leaveDepartment(oldDepartmentEmployee);
         DepartmentEmployee newDepartmentEmployee = new DepartmentEmployee();
-        newDepartmentEmployee.setStartDateInDepartment(LocalDate.now());
+        newDepartmentEmployee.setStartDateInDepartment(LocalDateTime.now());
         newDepartmentEmployee.setEmployee(oldDepartmentEmployee.getEmployee());
         newDepartmentEmployee.setDepartment(departmentService.getById(newdepartment_id));
+        newDepartmentEmployee.setDescription(description);
         add(newDepartmentEmployee);
     }
 
@@ -118,6 +130,18 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         for (DepartmentEmployee departmentEmployee : departmentEmployees) {
             deleteById(departmentEmployee.getId());
         }
+    }
+
+
+    @Override
+    public List<DepartmentEmployee> getAllByEmployeeIdBetweenDate(Long employee_id, LocalDateTime start, LocalDateTime end) {
+        List<DepartmentEmployee> departments =  entityManager
+                .createQuery("FROM DepartmentEmployee AS c WHERE c.employee.id = :empl_id AND c.startDateInDepartment BETWEEN :stDate AND :edDate")
+                .setParameter("stDate", start)
+                .setParameter("edDate", end)
+                .setParameter("empl_id", employee_id).getResultList();
+        System.out.println(Arrays.toString(departments.toArray()));
+        return departments;
     }
 
 

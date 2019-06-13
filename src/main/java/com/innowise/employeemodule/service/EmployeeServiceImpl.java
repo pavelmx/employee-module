@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,14 +96,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         PositionEmployee positionEmployee = new PositionEmployee();
         positionEmployee.setEmployee(employee);
         positionEmployee.setPosition(position);
-        positionEmployee.setStartDateForPosition(LocalDate.now());
+        positionEmployee.setStartDateForPosition(LocalDateTime.now());
         positionEmployeeService.add(positionEmployee);
         //create department_employee
         DepartmentEmployee departmentEmployee = new DepartmentEmployee();
         departmentEmployee.setCurrentDepartment(true);
         departmentEmployee.setDepartment(department);
         departmentEmployee.setEmployee(employee);
-        departmentEmployee.setStartDateInDepartment(LocalDate.now());
+        departmentEmployee.setStartDateInDepartment(LocalDateTime.now());
         departmentEmployeeService.add(departmentEmployee);
     }
 

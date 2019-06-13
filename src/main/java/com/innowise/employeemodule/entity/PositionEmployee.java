@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,7 +30,9 @@ public class PositionEmployee extends AbstractEntity{
     @JoinColumn(name = "position_id")
     private Position position;
 
-    private LocalDate startDateForPosition;
+    private String description;
 
-    private LocalDate endDateForPosition;
+    private LocalDateTime startDateForPosition;
+
+    private LocalDateTime endDateForPosition;
 }

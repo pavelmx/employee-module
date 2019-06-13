@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PositionEmployeeService extends AbstractService<PositionEmployee>{
 
-    void changePosition(Long employee_id, Long newposition_id);
+    void changePosition(Long employee_id, Long newposition_id, String description);
 
     PositionEmployee getCurrentByEmployeeIdAndEndDateForPositionIsNull(Long employee_id);
 
