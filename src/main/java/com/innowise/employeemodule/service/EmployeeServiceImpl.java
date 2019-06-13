@@ -69,12 +69,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeCandidate> employeeCandidateList = new ArrayList<>();
         List<Employee> employeeList = getAllActive();
         for (int i = 0; i < employeeList.size(); i++) {
-            PersonalInfo personalInfo = employeeList.get(i).getPersonalInfo();
+            Employee employee = employeeList.get(i);
+            PersonalInfo personalInfo = employee.getPersonalInfo();
             DepartmentEmployee departmentEmployee = departmentEmployeeService.getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(employeeList.get(i).getId());
             Department department = departmentEmployee.getDepartment();
             DepartmentCandidate departmentCandidate = new DepartmentCandidate();
             departmentCandidate.setDepartmentName(department.getName());
             EmployeeCandidate employeeCandidate = new EmployeeCandidate();
+            employeeCandidate.setId(employee.getId());
             employeeCandidate.setFirstName(personalInfo.getFirstName());
             employeeCandidate.setLastName(personalInfo.getLastName());
             employeeCandidate.setDepartment(departmentCandidate);

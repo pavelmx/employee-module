@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeCandidate {
 
+
+    private Long id;
+
     private String firstName;
 
     private String lastName;
