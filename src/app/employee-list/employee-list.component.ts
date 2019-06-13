@@ -13,6 +13,11 @@ import { SortEvent, NgbdSortableHeader } from '../util/sortable.directive';
 import { ToastService } from '../util/toast.service';
 import { EmployeeFilter } from '../models/employee-filter.model';
 import { StorageService } from '../services/storage.service';
+import { PositionEmployeeService } from '../services/position-employee.service';
+import { DepartmentEmployeeService } from '../services/department-employee.service';
+import { DepartmentPosition } from '../models/department-position.model';
+import { OrderModule } from 'ngx-order-pipe';
+import { DepartmentPositionService } from '../services/department-position.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -21,13 +26,18 @@ import { StorageService } from '../services/storage.service';
 })
 export class EmployeeListComponent implements OnInit {
 
+  flag: boolean = false;
   list: Employee[];
+  depPosList: DepartmentPosition[] = [];
   currentPositionEmployee: PositionEmployee;
   currentPosition: Position;
   currentDepartmentEmployee: DepartmentEmployee;
   currentDepartment: Department;
   positionList: Position[];
+  positionEmplList: PositionEmployee[] = [];
   departmentList: Department[];
+  departmentsByEmplId: DepartmentEmployee[];
+  posEmpl: PositionEmployee[];
   form: any = {};
   formedit: any = {};
   formchange: any = {};
@@ -53,7 +63,9 @@ export class EmployeeListComponent implements OnInit {
   constructor(
     private employeeService: EmployeeService,
     private positionService: PositionService,
+    private positionEmployeeService: PositionEmployeeService,
     private departmentService: DepartmentService,
+    private departmentPositionService: DepartmentPositionService,
     private toast: ToastService,
     private storage: StorageService) { }
 
@@ -125,6 +137,18 @@ export class EmployeeListComponent implements OnInit {
         }
       );
   }
+  initEmployeePositionList(employee: Employee){
+    this.positionEmployeeService.getAllByEmployeeId(employee.id)
+      .subscribe(
+        response => {
+          this.positionEmplList = response;
+          //this.initDepPosList(employee);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
 
   initDepartmentList() {
     this.departmentService.getList()
@@ -137,7 +161,15 @@ export class EmployeeListComponent implements OnInit {
         }
       );
   }
-
+  
+  initDepPosList(employee: Employee){
+    console.log("initDepPosList");
+    this.departmentPositionService.getByEmplId(employee.id)
+      .subscribe(
+        (data) => this.depPosList = data,
+        (error) => console.log(error)
+      );
+  }
   add(form: NgForm) {
     var employee = new Employee();
     employee.personalInfo = this.form;
@@ -165,12 +197,13 @@ export class EmployeeListComponent implements OnInit {
 
   setEditEmployee(employee: Employee) {
     this.active = employee.active;
+    this.initEmployeePositionList(employee);
+    this.currentEmployee = employee;
     this.employeeService.getOne(employee.id)
       .subscribe(
         response => {
           this.formedit = response;
           this.personalInfo = this.formedit.personalInfo;
-          
         }
       );
   }
@@ -245,11 +278,12 @@ export class EmployeeListComponent implements OnInit {
   }
 
   changePosition() {
-    this.employeeService.changePosition( this.formchange.currentEmployeeId, this.formchange.position_id)
+    this.employeeService.changePosition( this.formchange.currentEmployeeId, this.formchange.position_id, this.formchange.description)
       .subscribe(
         response => {
           this.setCurrentPosition(this.formchange.currentEmployeeId);
           this.toast.showSuccess("Success", response.message);
+          this.initDepPosList(this.currentEmployee);
           this.closePosModal.nativeElement.click();
         },
         error => {         
@@ -279,11 +313,12 @@ export class EmployeeListComponent implements OnInit {
   }
 
   changeDepartment() {   
-    this.employeeService.changeDepartment(this.formchange.currentEmployeeId, this.formchange.department_id)
+    this.employeeService.changeDepartment(this.formchange.currentEmployeeId, this.formchange.department_id, this.formchange.description)
       .subscribe(
         response => {
           this.setCurrentDepartment(this.formchange.currentEmployeeId);
           this.toast.showSuccess("Success", response.message);
+          this.initDepPosList(this.currentEmployee);
           this.closeDepModal.nativeElement.click();
         },
         error => {

@@ -18,6 +18,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgbdSortableHeader } from './util/sortable.directive';
 import { ToastrModule } from 'ngx-toastr';
 import { StorageService } from './services/storage.service';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { StorageService } from './services/storage.service';
     NgbdSortableHeader
   ],
   imports: [
+    OrderModule,
     NgbModule,
     BrowserModule,
     AppRoutingModule,

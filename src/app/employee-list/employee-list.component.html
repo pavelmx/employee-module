@@ -165,7 +165,7 @@
       <td>
         <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#infoModal"
           (click)="setEditEmployee(employee)" (click)="setCurrentDepartment(employee.id)"
-          (click)="setCurrentPosition(employee.id)">Info</button>
+          (click)="setCurrentPosition(employee.id)" (click)="initDepPosList(employee)">Info</button>
       </td>
     </tr>
   </tbody>
@@ -380,6 +380,31 @@
               (click)="setCurrentDepartment(formedit.id)" [disabled]="!active">Change department</button>
           </div>
         </div>
+        <h4>The history of development</h4>
+        <div class="row">
+          <div class="col">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Department</th>
+                  <th>Position</th>
+                  <th>Start</th>
+                  <th>End</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let depPos of depPosList ">
+                  <td>{{depPos.id}}</td>
+                  <td>{{depPos.department.name}}</td>
+                  <td>{{depPos.position.name}}</td>
+                  <td>{{depPos.startDate }}</td>
+                  <td>{{depPos.endDate}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div *ngIf="!active" class="alert alert-info ">Editing the data of the dismissed employee is impossible</div>
       </div>
 
@@ -425,11 +450,19 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea type="text" class="form-control" name="description" [(ngModel)]="formchange.description"></textarea>
+              </div>
+            </div>
+          </div>
         </form>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button [disabled]="formchange.currentPositionId===formchange.position_id" type="button"
-            class="btn btn-primary" [disabled]="fchangeposition.form.invalid" (click)="changePosition()">Change</button>
+            class="btn btn-primary" [disabled]="fchangeposition.form.invalid" (click)="changePosition();">Change</button>
         </div>
       </div>
     </div>
@@ -466,6 +499,14 @@
                   <option *ngFor="let department of departmentList" [ngValue]="department.id">{{department.name}}
                   </option>
                 </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea type="text" class="form-control" name="description" [(ngModel)]="formchange.description"></textarea>
               </div>
             </div>
           </div>
