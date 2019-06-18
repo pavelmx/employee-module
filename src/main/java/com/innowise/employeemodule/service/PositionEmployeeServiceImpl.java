@@ -1,8 +1,5 @@
 package com.innowise.employeemodule.service;
 
-import com.innowise.employeemodule.entity.DepartmentEmployee;
-import com.innowise.employeemodule.entity.HiringEmployeeInfo;
-import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.entity.PositionEmployee;
 import com.innowise.employeemodule.repository.PositionEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,19 +66,19 @@ public class PositionEmployeeServiceImpl implements  PositionEmployeeService{
 
     @Override
     public List<PositionEmployee> getAllByEmployeeId(Long employee_id){
-        List<PositionEmployee> positionEmployeeList = repository.findByEmployee_Id(employee_id);
+        List<PositionEmployee> positionEmployeeList = repository.findByEmployeeId(employee_id);
         return positionEmployeeList;
     }
 
     @Override
     public List<PositionEmployee> getAllByPositionId(Long position_id){
-        List<PositionEmployee> positionEmployeeList = repository.findByPosition_IdAndEndDateForPositionIsNull(position_id);
+        List<PositionEmployee> positionEmployeeList = repository.findByPositionIdAndEndDateForPositionIsNull(position_id);
         return positionEmployeeList;
     }
 
     @Override
     public PositionEmployee getCurrentByEmployeeIdAndEndDateForPositionIsNull(Long employee_id){
-        PositionEmployee positionEmployee = repository.findByEmployee_IdAndEndDateForPositionIsNull(employee_id)
+        PositionEmployee positionEmployee = repository.findByEmployeeIdAndEndDateForPositionIsNull(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("PositionEmployee by employee's id: '" + employee_id + "' where EndDateForPosition = null not found"));
         return positionEmployee;
     }

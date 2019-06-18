@@ -1,9 +1,7 @@
 package com.innowise.employeemodule.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -23,11 +22,11 @@ public class DepartmentEmployee extends AbstractEntity {
     @SequenceGenerator(name = "sequenceGenerator", schema = "employee_schema", sequenceName = "sq_department_employee")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "department_id")
     private Department department;
 

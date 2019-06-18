@@ -19,3 +19,11 @@ spring:
   liquibase:
     change-log: classpath:changelog/db.changelog-master.xml
 
+logging:
+  level:
+    org.springframework: ERROR
+    com.innowise: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+  file: app.log

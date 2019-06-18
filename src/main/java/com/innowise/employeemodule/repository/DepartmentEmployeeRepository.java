@@ -11,10 +11,10 @@ import java.util.Optional;
 @Repository
 public interface DepartmentEmployeeRepository extends JpaRepository<DepartmentEmployee, Long> {
 
-    Optional<DepartmentEmployee> findByEmployee_IdAndIsCurrentDepartmentTrue(Long id);
+    Optional<DepartmentEmployee> findByEmployeeIdAndIsCurrentDepartmentTrue(Long id);
 
-    List<DepartmentEmployee> findByEmployee_Id(Long id);
+    List<DepartmentEmployee> findByEmployeeId(Long id);
 
-    List<DepartmentEmployee> findByDepartment_IdAndIsCurrentDepartmentTrue(Long id);
+    List<DepartmentEmployee> findByDepartmentIdAndIsCurrentDepartmentTrue(Long id);
 
 }

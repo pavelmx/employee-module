@@ -59,6 +59,8 @@ dependencies {
 
 	compile "com.querydsl:querydsl-jpa:4.1.4"
 	compile "com.querydsl:querydsl-apt:4.1.4:jpa"
+
+	testCompile("org.testcontainers:postgresql:1.7.3")
 }
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {

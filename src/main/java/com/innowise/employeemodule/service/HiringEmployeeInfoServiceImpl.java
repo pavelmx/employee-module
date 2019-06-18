@@ -2,9 +2,7 @@ package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
-import com.innowise.employeemodule.entity.PersonalInfo;
 import com.innowise.employeemodule.repository.HiringEmployeeInfoRepository;
-import com.innowise.employeemodule.repository.PersonalInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +29,7 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
 
     @Override
     public List<HiringEmployeeInfo> getByEmployeeId(Long employee_id) {
-        return repository.findByEmployee_Id(employee_id);
+        return repository.findByEmployeeId(employee_id);
     }
 
     @Override
@@ -77,7 +75,7 @@ public class HiringEmployeeInfoServiceImpl implements HiringEmployeeInfoService 
 
     @Override
     public HiringEmployeeInfo setDismissEmployee(Employee employee) {
-        HiringEmployeeInfo hiringEmployeeInfo = repository.findByEmployee_IdAndDateOfDismissalIsNull(employee.getId())
+        HiringEmployeeInfo hiringEmployeeInfo = repository.findByEmployeeIdAndDateOfDismissalIsNull(employee.getId())
                 .orElseThrow( () -> new EntityNotFoundException("HiringEmployeeInfo by employee's id: '" + employee.getId() + "' not found"));
         hiringEmployeeInfo.setDateOfDismissal(LocalDate.now());
         return repository.save(hiringEmployeeInfo);

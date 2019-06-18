@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface PositionEmployeeRepository extends JpaRepository<PositionEmployee, Long> {
 
-    Optional<PositionEmployee> findByEmployee_IdAndEndDateForPositionIsNull(Long id);
+    Optional<PositionEmployee> findByEmployeeIdAndEndDateForPositionIsNull(Long id);
 
-    List<PositionEmployee> findByEmployee_Id(Long id);
+    List<PositionEmployee> findByEmployeeId(Long id);
 
-    List<PositionEmployee> findByPosition_IdAndEndDateForPositionIsNull(Long id);
+    List<PositionEmployee> findByPositionIdAndEndDateForPositionIsNull(Long id);
 }

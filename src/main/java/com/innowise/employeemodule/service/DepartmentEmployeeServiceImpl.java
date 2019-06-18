@@ -1,10 +1,7 @@
 package com.innowise.employeemodule.service;
 
-import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.DepartmentEmployee;
-import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.repository.DepartmentEmployeeRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,14 +10,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -76,19 +70,19 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public List<DepartmentEmployee> getAllByEmployeeId(Long employee_id){
-        List<DepartmentEmployee> departmentEmployeeList = repository.findByEmployee_Id(employee_id);
+        List<DepartmentEmployee> departmentEmployeeList = repository.findByEmployeeId(employee_id);
         return departmentEmployeeList;
     }
 
     @Override
     public List<DepartmentEmployee> getAllByDepartmentId(Long department_id){
-        List<DepartmentEmployee> departmentEmployeeList = repository.findByDepartment_IdAndIsCurrentDepartmentTrue(department_id);
+        List<DepartmentEmployee> departmentEmployeeList = repository.findByDepartmentIdAndIsCurrentDepartmentTrue(department_id);
         return departmentEmployeeList;
     }
 
     @Override
     public DepartmentEmployee getCurrentByEmployeeIdAndIsCurrentDepartmentTrue(Long employee_id){
-        DepartmentEmployee departmentEmployee = repository.findByEmployee_IdAndIsCurrentDepartmentTrue(employee_id)
+        DepartmentEmployee departmentEmployee = repository.findByEmployeeIdAndIsCurrentDepartmentTrue(employee_id)
                 .orElseThrow( () -> new EntityNotFoundException("DepartmentEmployee by employee's id: '" + employee_id + "' where IsCurrentDepartment = true not found"));
         return departmentEmployee;
     }
