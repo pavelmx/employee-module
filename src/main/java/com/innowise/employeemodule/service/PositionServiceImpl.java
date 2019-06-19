@@ -38,7 +38,7 @@ public class PositionServiceImpl implements PositionService {
             throw new EntityExistsException("Position with name: '" + position.getName() + "' already exists");
         }
         position.setActive(true);
-        return repository.save(position);
+        return repository.saveAndFlush(position);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public void disable(Long id) {
         Position position = getById(id);
-        if (position.isActive() == true) {
+        if (position.isActive()) {
             position.setActive(false);
             repository.save(position);
         } else {
@@ -82,7 +82,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public void enable(Long id) {
         Position position = getById(id);
-        if (position.isActive() == false) {
+        if (!position.isActive()) {
             position.setActive(true);
             repository.save(position);
         } else {

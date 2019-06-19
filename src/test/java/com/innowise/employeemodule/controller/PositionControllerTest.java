@@ -1,9 +1,7 @@
-package com.innowise.employeemodule.intergration;
+package com.innowise.employeemodule.controller;
 
-import com.innowise.employeemodule.entity.Department;
 import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.repository.PositionRepository;
-import com.innowise.employeemodule.service.DepartmentService;
 import com.innowise.employeemodule.service.PositionService;
 import org.junit.After;
 import org.junit.Assert;
@@ -155,6 +153,7 @@ public class PositionControllerTest {
     @After
     public void after(){
       service.deleteById(positionId);
+      service.deleteAll();
     }
 
 }

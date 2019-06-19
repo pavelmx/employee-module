@@ -1,8 +1,6 @@
-package com.innowise.employeemodule.db;
+package com.innowise.employeemodule.repository;
 
-import com.innowise.employeemodule.entity.AbstractEntity;
-import com.innowise.employeemodule.repository.AbstractRepository;
-import com.querydsl.core.types.dsl.EntityPathBase;
+import com.innowise.employeemodule.entity.BaseEntity;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,30 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public abstract class AbstractRepositoryTest<E extends AbstractEntity, R extends JpaRepository<E, Long>> {
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=employee_schema_test",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
+})
+public abstract class AbstractRepositoryIntegrationTest<E extends BaseEntity, R extends JpaRepository<E, Long>> {
 
     @Autowired
     private R repository;
 
     private E entity;
 
-    public abstract E createObject();
+    protected abstract E createObject();
 
-    public abstract E createObject(long id);
-
-    public abstract Long getObjectId();
+    protected abstract E updateObject(E entity);
 
     @Before
     public void setUp() {
@@ -57,7 +56,7 @@ public abstract class AbstractRepositoryTest<E extends AbstractEntity, R extends
     @Test
     public void testFindById(){
         entity = repository.saveAndFlush(entity);
-        E entityFromDB =  repository.findById(getObjectId()).get();
+        E entityFromDB =  repository.findById(entity.getId()).get();
         Assert.assertEquals(entity, entityFromDB);
     }
 
@@ -65,15 +64,15 @@ public abstract class AbstractRepositoryTest<E extends AbstractEntity, R extends
     public void testFindAll(){
         repository.saveAndFlush(entity);
         List<E> entities = repository.findAll();
-        Assert.assertEquals(entities, Arrays.asList(entity));
+        Assert.assertEquals(entities, Collections.singletonList(entity));
     }
 
     @Test
     public void testUpdate(){
         repository.save(entity);
-        E newEntity = createObject(getObjectId());
+        E newEntity = updateObject(entity);
         repository.save(newEntity);
-        E entityFromDB =  repository.getOne(getObjectId());
+        E entityFromDB =  repository.getOne(entity.getId());
         Assert.assertEquals(newEntity, entityFromDB);
     }
 
@@ -81,8 +80,8 @@ public abstract class AbstractRepositoryTest<E extends AbstractEntity, R extends
     public void testDelete(){
         repository.save(entity);
         repository.delete(entity);
-        boolean entityFromDB =  repository.findById(getObjectId()).isPresent();
-        Assert.assertEquals(false, entityFromDB);
+        boolean entityFromDB =  repository.findById(entity.getId()).isPresent();
+        Assert.assertFalse(entityFromDB);
     }
 
     @Test

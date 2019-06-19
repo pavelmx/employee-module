@@ -1,18 +1,17 @@
-package com.innowise.employeemodule.intergration;
+package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.repository.EmployeeRepository;
+import com.innowise.employeemodule.repository.PositionRepository;
 import com.innowise.employeemodule.service.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -42,6 +41,12 @@ public class EmployeeControllerTest {
     private EmployeeRepository repository;
 
     @Autowired
+    private PositionRepository positionRepository;
+
+    @Autowired
+    private PositionService positionService;
+
+    @Autowired
     private PersonalInfoService pservice;
 
     @Autowired
@@ -54,8 +59,11 @@ public class EmployeeControllerTest {
     private PositionEmployeeService positionEmployeeService;
 
     private Long employeeId;
+    private Long positionId;
 
     private Employee employee;
+
+    private Position position;
 
     private PersonalInfo personalInfo;
 
@@ -74,9 +82,18 @@ public class EmployeeControllerTest {
         employeeId = employee.getId();
     }
 
+    private void createPosition(){
+        position = new Position();
+        position.setActive(true);
+        position.setName("Position " + Math.random());
+        position = positionService.add(position);
+        positionId = position.getId();
+    }
+
     @Before
     public void before(){
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        createPosition();
         createEmployee();
     }
 
@@ -127,7 +144,7 @@ public class EmployeeControllerTest {
         personalInfo.setAdress("test post adress");
         personalInfo.setSkype("test post skype");
         employee.setPersonalInfo(personalInfo);
-        MvcResult mvcResult = this.mockMvc.perform(post("/employee?position_id=1&department_id=1")
+        MvcResult mvcResult = this.mockMvc.perform(post("/employee?position_id=" + positionId + "&department_id=1")
                 .content(JsonUtil.toJson(employee)).contentType("application/json;charset=UTF-8")
         ).andDo(print()).andExpect(status().isCreated())
                 .andReturn();
@@ -154,7 +171,7 @@ public class EmployeeControllerTest {
         personalInfo.setSkype("test delete");
         personalInfo.setPhoneNumber("test delete");
         employee.setPersonalInfo(personalInfo);
-        employee = service.create(employee,1L,1L);
+        employee = service.create(employee,positionId,1L);
         Long id = employee.getId();
         MvcResult mvcResult = this.mockMvc.perform(delete("/employee/" + id))
                 .andDo(print()).andExpect(status().isOk())
@@ -171,14 +188,14 @@ public class EmployeeControllerTest {
         personalInfo.setSkype("test dismissal");
         personalInfo.setPhoneNumber("test dismissal");
         employee.setPersonalInfo(personalInfo);
-        employee = service.create(employee, 1L, 1L);
+        employee = service.create(employee, positionId, 1L);
         Long id = employee.getId();
         MvcResult mvcResult = this.mockMvc.perform(get("/employee/dismissal/" + id))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("message").value("Employee with id: '" + id + "' was dismissed"))
                 .andReturn();
 
-        Assert.assertEquals(service.getById(id).isActive(), false);
+        Assert.assertFalse(service.getById(id).isActive());
         service.deleteById(id);
     }
 
@@ -190,22 +207,23 @@ public class EmployeeControllerTest {
         personalInfo.setSkype("test recovery");
         personalInfo.setPhoneNumber("test recovery");
         employee.setPersonalInfo(personalInfo);
-        employee = service.create(employee,1L,1L);
+        employee = service.create(employee, positionId,1L);
         employee.setActive(false);
         employee = repository.save(employee);
         Long id = employee.getId();
         MvcResult mvcResult = this.mockMvc.perform(get("/employee/recovery/" + id)
-        .param("position_id", "1").param("department_id", "1"))
+        .param("position_id", positionId.toString()).param("department_id", "1"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("message").value("Employee with id: '"+ id +"' was reinstated"))
                 .andReturn();
-        Assert.assertEquals(service.getById(id).isActive(), true);
+        Assert.assertTrue(service.getById(id).isActive());
         service.deleteById(id);
     }
 
     @After
     public void after(){
         service.deleteById(employeeId);
+        service.deleteAll();
     }
 
 }

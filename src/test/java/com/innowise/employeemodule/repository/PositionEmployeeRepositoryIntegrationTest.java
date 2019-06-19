@@ -1,7 +1,9 @@
-package com.innowise.employeemodule.db;
+package com.innowise.employeemodule.repository;
 
 import com.innowise.employeemodule.entity.*;
 import com.innowise.employeemodule.repository.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -9,11 +11,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public class PositionEmployeeRepositoryTest extends AbstractRepositoryTest<PositionEmployee, PositionEmployeeRepository> {
+public class PositionEmployeeRepositoryIntegrationTest extends AbstractRepositoryIntegrationTest<PositionEmployee, PositionEmployeeRepository> {
 
     private PositionEmployee positionEmployee;
 
@@ -25,6 +30,35 @@ public class PositionEmployeeRepositoryTest extends AbstractRepositoryTest<Posit
 
     @Autowired
     private PositionRepository positionRepository;
+
+    @Autowired
+    private PositionEmployeeRepository positionEmployeeRepository;
+
+    @Test
+    public void findByEmployeeIdTest(){
+        createObject();
+        positionEmployeeRepository.saveAndFlush(positionEmployee);
+        List<PositionEmployee> positionEmployeeList = positionEmployeeRepository.findByEmployeeId(positionEmployee.getEmployee().getId());
+        Assert.assertEquals(Collections.singletonList(positionEmployee), positionEmployeeList);
+    }
+
+    @Test
+    public void findByPositionIdAndEndDateForPositionIsNullTest(){
+        createObject();
+        positionEmployee.setEndDateForPosition(null);
+        positionEmployeeRepository.saveAndFlush(positionEmployee);
+        List<PositionEmployee> positionEmployeeList = positionEmployeeRepository.findByPositionIdAndEndDateForPositionIsNull(positionEmployee.getPosition().getId());
+        Assert.assertEquals(Collections.singletonList(positionEmployee), positionEmployeeList);
+    }
+
+    @Test
+    public void findByEmployeeIdAndEndDateForPositionIsNullTest(){
+        createObject();
+        positionEmployee.setEndDateForPosition(null);
+        positionEmployeeRepository.saveAndFlush(positionEmployee);
+        boolean isPresent = positionEmployeeRepository.findByEmployeeIdAndEndDateForPositionIsNull(positionEmployee.getEmployee().getId()).isPresent();
+        Assert.assertTrue(isPresent);
+    }
 
     @Override
     public PositionEmployee createObject() {
@@ -43,7 +77,7 @@ public class PositionEmployeeRepositoryTest extends AbstractRepositoryTest<Posit
                 .isActive(true)
                 .build();
         employee = employeeRepository.saveAndFlush(employee);
-        Position position = Position.builder().name("GOD of programming").isActive(true).build();
+        Position position = Position.builder().name("GOD of programming " + Math.random()).isActive(true).build();
         position = positionRepository.saveAndFlush(position);
         this.positionEmployee = PositionEmployee.builder()
                 .description("Description One")
@@ -56,7 +90,7 @@ public class PositionEmployeeRepositoryTest extends AbstractRepositoryTest<Posit
     }
 
     @Override
-    public PositionEmployee createObject(long id) {
+    public PositionEmployee updateObject(PositionEmployee entity) {
         PersonalInfo personalInfo = PersonalInfo.builder()
                 .firstName("katya")
                 .lastName("Pushnova")
@@ -74,20 +108,15 @@ public class PositionEmployeeRepositoryTest extends AbstractRepositoryTest<Posit
         employee = employeeRepository.saveAndFlush(employee);
         Position position = Position.builder().name("GOD of cooking").isActive(true).build();
         position = positionRepository.saveAndFlush(position);
-        this.positionEmployee = PositionEmployee.builder()
+        entity = PositionEmployee.builder()
                 .description("Second Description")
                 .startDateForPosition(LocalDateTime.now().minusDays(50))
                 .endDateForPosition(LocalDateTime.now().minusDays(15))
                 .employee(employee)
                 .position(position)
-                .id(id)
+                .id(entity.getId())
                 .build();
-        return this.positionEmployee;
-    }
-
-    @Override
-    public Long getObjectId() {
-        return this.positionEmployee.getId();
+        return entity;
     }
 
 }

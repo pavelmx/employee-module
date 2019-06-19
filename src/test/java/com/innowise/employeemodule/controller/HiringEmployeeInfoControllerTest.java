@@ -1,15 +1,12 @@
-package com.innowise.employeemodule.intergration;
+package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.HiringEmployeeInfo;
 import com.innowise.employeemodule.entity.PersonalInfo;
-import com.innowise.employeemodule.entity.Position;
 import com.innowise.employeemodule.repository.HiringEmployeeInfoRepository;
-import com.innowise.employeemodule.repository.PositionRepository;
 import com.innowise.employeemodule.service.EmployeeService;
 import com.innowise.employeemodule.service.HiringEmployeeInfoService;
 import com.innowise.employeemodule.service.PersonalInfoService;
-import com.innowise.employeemodule.service.PositionService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

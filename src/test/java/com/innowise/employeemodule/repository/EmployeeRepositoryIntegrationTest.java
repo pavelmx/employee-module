@@ -1,31 +1,22 @@
-package com.innowise.employeemodule.db;
+package com.innowise.employeemodule.repository;
 
 import com.innowise.employeemodule.entity.Employee;
 import com.innowise.employeemodule.entity.PersonalInfo;
-import com.innowise.employeemodule.repository.AbstractRepository;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.innowise.employeemodule.repository.PersonalInfoRepository;
-import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public class EmployeeRepositoryTest extends AbstractRepositoryTest<Employee, EmployeeRepository> {
+public class EmployeeRepositoryIntegrationTest extends AbstractRepositoryIntegrationTest<Employee, EmployeeRepository> {
 
-     @Autowired
-     private PersonalInfoRepository personalInfoRepository;
+    @Autowired
+    private PersonalInfoRepository personalInfoRepository;
 
     private Employee employee;
 
@@ -49,7 +40,7 @@ public class EmployeeRepositoryTest extends AbstractRepositoryTest<Employee, Emp
     }
 
     @Override
-    public Employee createObject(long id) {
+    public Employee updateObject(Employee entity) {
         PersonalInfo personalInfo = PersonalInfo.builder()
                 .firstName("petya")
                 .lastName("Popkin")
@@ -60,17 +51,12 @@ public class EmployeeRepositoryTest extends AbstractRepositoryTest<Employee, Emp
                 .skype("skype")
                 .build();
         personalInfo = personalInfoRepository.saveAndFlush(personalInfo);
-        this.employee = Employee.builder()
+        entity = Employee.builder()
                 .personalInfo(personalInfo)
                 .isActive(true)
-                .id(id)
+                .id(entity.getId())
                 .build();
-        return this.employee;
-    }
-
-    @Override
-    public Long getObjectId() {
-        return this.employee.getId();
+        return entity;
     }
 
 }

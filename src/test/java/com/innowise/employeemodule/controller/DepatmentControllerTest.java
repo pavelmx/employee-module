@@ -1,7 +1,6 @@
-package com.innowise.employeemodule.intergration;
+package com.innowise.employeemodule.controller;
 
 import com.innowise.employeemodule.entity.Department;
-import com.innowise.employeemodule.repository.DepartmentRepository;
 import com.innowise.employeemodule.service.DepartmentService;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
