@@ -16,9 +16,6 @@ spring:
     username: postgres
     password: 54321
 
-  liquibase:
-    change-log: classpath:changelog/db.changelog-master.xml
-
 logging:
   level:
     org.springframework: ERROR
