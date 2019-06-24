@@ -1,13 +1,21 @@
+spring:
+  profiles:
+    active: dev
+
+
 server:
   port: 8087
 
+---
+
 spring:
+  profiles: dev
   jpa:
     properties:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
-        ddl-auto: update
+        ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
 
   datasource:
@@ -15,7 +23,3 @@ spring:
     url: jdbc:postgresql://localhost:5432/mydb?currentSchema=employee_schema
     username: myuser
     password: 123
-
-  liquibase:
-    change-log: classpath:changelog/db.changelog-master.xml
-

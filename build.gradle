@@ -1,12 +1,24 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.liquibase:liquibase-gradle-plugin:2.0.1'
+    }
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.1.5.RELEASE'
 	id 'java'
-
+	id "org.liquibase.gradle" version "2.0.1"
 }
 
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'liquibase'
 
+import groovy.sql.Sql
 
 
 group = 'com.innowise'
@@ -34,31 +46,37 @@ sourceSets {
 	generated
 }
 sourceSets.generated.java.srcDirs = ['src/main/java/generated']
+
 configurations {
+	jdbc
 	querydslapt
 }
 
 dependencies {
-
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	implementation 'org.liquibase:liquibase-core'
-	
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile 'org.modelmapper:modelmapper:1.1.0'
 
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'org.postgresql:postgresql'
-	
+	compile 'org.postgresql:postgresql'
+
 	compile 'io.springfox:springfox-swagger2:2.9.2'
 	compile 'io.springfox:springfox-swagger-ui:2.9.2'
 
 	compile "com.querydsl:querydsl-jpa:4.1.4"
 	compile "com.querydsl:querydsl-apt:4.1.4:jpa"
+
+	jdbc 'org.postgresql:postgresql:42.2.5'
+	liquibaseRuntime 'org.postgresql:postgresql:9.4.1211.jre7'
+	liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
+	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
+	liquibaseRuntime 'ch.qos.logback:logback-core:1.2.3'
+	liquibaseRuntime 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
@@ -86,3 +104,69 @@ task getHomeDir {
 		println gradle.gradleHomeDir
 	}
 }
+
+
+def props = [user: 'myuser', password: '123'] as Properties
+def urldb = "jdbc:postgresql://localhost:5432/mydb"
+def driver = 'org.postgresql.Driver'
+def sql = Sql.newInstance(urldb, props, driver)
+def sqlClassLoader = Sql.classLoader
+configurations.jdbc.each { sqlClassLoader.addURL it.toURI().toURL() }
+
+task insertData {
+	doLast {
+        String sqlString = file('src/main/resources/insert_data.sql').text
+        println(sqlString)
+        sql.execute(sqlString)
+    }
+}
+
+task deleteData {
+	doLast {
+        String sqlString = file('src/main/resources/delete_data.sql').text
+        println(sqlString)
+		sql.execute(sqlString)
+	}
+}
+
+task dropSchemes{
+	doLast {
+		String sqlString = 'DROP SCHEMA employee_schema CASCADE'
+		sql.execute(sqlString)
+		String sqlStringTest = 'DROP SCHEMA employee_schema_test CASCADE'
+		sql.execute(sqlStringTest)
+	}
+}
+
+task createSchemes{
+	doLast {
+		String sqlString = 'CREATE SCHEMA employee_schema '
+		sql.execute(sqlString)
+		String sqlStringTest = 'CREATE SCHEMA employee_schema_test '
+		sql.execute(sqlStringTest)
+	}
+}
+
+
+def changeLog = "$projectDir/src/main/resources/changelog/db.changelog-master.xml"
+liquibase {
+	activities {
+		main {
+			changeLogFile changeLog
+			url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=employee_schema'
+			username 'myuser'
+			password '123'
+		}
+		test{
+			changeLogFile 'src/main/resources/changelog/db.changelog-master.xml'
+			url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=employee_schema_test'
+			username 'myuser'
+			password '123'
+		}
+	}
+    runList = 'main, test'
+}
+
+
+
+
