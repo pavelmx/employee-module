@@ -1,0 +1,1 @@
+INSERT INTO employee_schema.department (name, manager_id) VALUES ('OOOOOOOOOOOOOOOOOOO', 1);

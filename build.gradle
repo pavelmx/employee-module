@@ -1,22 +1,25 @@
 buildscript {
+	ext {
+		springBootVersion = '1.4.0.BUILD-SNAPSHOT'
+		querydslVersion = '4.1.3'
+	}
 	repositories {
 		mavenLocal()
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'org.liquibase:liquibase-gradle-plugin:2.0.1'
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
 
 plugins {
 	id 'org.springframework.boot' version '2.1.5.RELEASE'
 	id 'java'
-	id "org.liquibase.gradle" version "2.0.1"
+	//id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'liquibase'
 
 group = 'com.innowise'
 version = '0.0.1-SNAPSHOT'
@@ -44,11 +47,9 @@ sourceSets {
 }
 sourceSets.generated.java.srcDirs = ['src/main/java/generated']
 configurations {
-	querydslapt
 	liquibaseRuntime
 	sqlDriver
 }
-
 dependencies {
 
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -57,7 +58,6 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-
 	compile 'org.modelmapper:modelmapper:1.1.0'
 
 	runtimeOnly 'com.h2database:h2'
@@ -66,79 +66,11 @@ dependencies {
 	compile 'io.springfox:springfox-swagger2:2.9.2'
 	compile 'io.springfox:springfox-swagger-ui:2.9.2'
 
-	compile "com.querydsl:querydsl-jpa:4.1.4"
-	compile "com.querydsl:querydsl-apt:4.1.4:jpa"
+	compile "com.querydsl:querydsl-root:$querydslVersion"
+	compile "com.querydsl:querydsl-jpa:$querydslVersion"
+	compile "com.querydsl:querydsl-apt:$querydslVersion:jpa"
 
 	testCompile("org.testcontainers:postgresql:1.7.3")
 
 	sqlDriver 'postgresql:postgresql:9.1-901-1.jdbc4'
-
-	liquibaseRuntime 'org.postgresql:postgresql:9.4.1211.jre7'
-	liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
-	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
-	liquibaseRuntime 'ch.qos.logback:logback-core:1.2.3'
-	liquibaseRuntime 'ch.qos.logback:logback-classic:1.2.3'
-}
-
-def serverHttpPort = project.properties['server.port']
-def dbUser = project.properties['spring.datasource.username']
-def dbPassword = project.properties['spring.datasource.password']
-def dbUrl = project.properties['spring.datasource.url']
-
-task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
-	source = sourceSets.main.java
-	classpath = configurations.compile + configurations.querydslapt
-	options.compilerArgs = [
-			"-proc:only",
-			"-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
-	]
-	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
-}
-
-compileJava {
-	dependsOn generateQueryDSL
-	source generateQueryDSL.destinationDir
-}
-
-compileGeneratedJava {
-	dependsOn generateQueryDSL
-	classpath += sourceSets.main.runtimeClasspath
-}
-
-task getHomeDir {
-	doLast {
-		println gradle.gradleHomeDir
-	}
-}
-
-task insertTestData(type: JavaExec) {
-	group = "Liquibase"
-	classpath  configurations.liquibaseRuntime
-	main = "liquibase.integration.commandline.Main"
-	args "--changeLogFile=src/main/resources/changelog/dev/0002_insert_data.xml"
-	args "--username=postgres"
-	args "--password=54321"
-	args "--url=jdbc:postgresql://localhost:5432/postgres"
-	args "--defaultSchemaName=employee_schema"
-	args "--driver=org.postgresql.Driver"
-	args "update"
-}
-
-
-liquibase {
-	activities {
-		main {
-			changeLogFile 'src/main/resources/changelog/db.changelog-master.xml'
-			url dbUrl
-			username dbUser
-			password dbPassword
-		}
-		test{
-			changeLogFile 'src/main/resources/changelog/db.changelog-master.xml'
-			url dbUrl
-			username dbUser
-			password dbPassword
-		}
-	}
-	runList = 'main, test'
 }
