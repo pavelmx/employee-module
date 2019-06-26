@@ -35,7 +35,7 @@ repositories {
 	mavenCentral()
 }
 
-
+/*
 idea {
 	module {
 		sourceDirs += file('generated/')
@@ -45,7 +45,7 @@ idea {
 sourceSets {
 	generated
 }
-sourceSets.generated.java.srcDirs = ['src/main/java/generated']
+sourceSets.generated.java.srcDirs = ['src/main/java/generated']*/
 configurations {
 	liquibaseRuntime
 	sqlDriver

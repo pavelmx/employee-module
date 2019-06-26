@@ -1,8 +1,8 @@
 package com.innowise.employeemodule.repository;
 
 import com.innowise.employeemodule.entity.Employee;
-//import com.innowise.employeemodule.com.innowise.employeemodule.entity.QEmployee;
 import com.innowise.employeemodule.entity.QEmployee;
+//import entity.QEmployee;
 import org.springframework.stereotype.Repository;
 
 @Repository

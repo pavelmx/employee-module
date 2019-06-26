@@ -1,12 +1,12 @@
 package com.innowise.employeemodule.service;
 
 import com.innowise.employeemodule.entity.*;
-//import com.innowise.employeemodule.com.innowise.employeemodule.entity.QEmployee;
+//import com.innowise.employeemodule.entity.QEmployee;
 import com.innowise.employeemodule.entity.filter.EmployeeFilter;
 import com.innowise.employeemodule.repository.EmployeeRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.innowise.employeemodule.entity.QEmployee;
+//import entity.QEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

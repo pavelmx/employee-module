@@ -4,5 +4,5 @@ pluginManagement {
 	}
 }
 rootProject.name = 'employee-module'
-include 'scripts'
+include 'db-management', 'main-project'
 

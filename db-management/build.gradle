@@ -24,16 +24,10 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    querydslapt
-    liquibaseRuntime
-    sqlDriver
-}
-
 dependencies {
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    //compileOnly 'org.projectlombok:lombok'
+    //annotationProcessor 'org.projectlombok:lombok'
 
     compile 'org.modelmapper:modelmapper:1.1.0'
 
@@ -53,7 +47,7 @@ task insertTestData(type: JavaExec) {
     group = "Liquibase"
     classpath  configurations.liquibaseRuntime
     main = "liquibase.integration.commandline.Main"
-    args "--changeLogFile=src/main/resources/changelog/sql/insert.sql"
+    args "--changeLogFile=src/main/resources/changelog/dev/0002_insert_data.xml"
     args "--username=$dbUsername"
     args "--password=$dbPassword"
     args "--url=$dbUrl"
@@ -61,7 +55,6 @@ task insertTestData(type: JavaExec) {
     args "--driver=org.postgresql.Driver"
     args "update"
 }
-
 
 liquibase {
     activities {
@@ -78,4 +71,5 @@ liquibase {
             password dbPassword
         }
     }
+    runList="$_runList"
 }
