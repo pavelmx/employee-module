@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="create_table_employee" author="oadmin">
+        <createTable  tableName="employee">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_employee">
+                <constraints primaryKey="true" primaryKeyName="pk_employee_id" nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean"></column>
+            <column name="personal_info_id" type="bigint"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_department" author="oadmin">
+        <createTable tableName="department">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_department">
+                <constraints primaryKey="true" primaryKeyName="pk_department_id" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"></column>
+            <column name="manager_id" type="bigint"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_department_employee" author="oadmin">
+        <createTable tableName="department_employee">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_department_employee">
+                <constraints primaryKey="true" primaryKeyName="pk_department_employee_id" nullable="false"/>
+            </column>
+            <column name="employee_id" type="bigint"></column>
+            <column name="department_id" type="bigint"></column>
+            <column name="description" type="varchar(255)"></column>
+            <column name="is_current_department" type="boolean"></column>
+            <column name="start_date_in_department" type="timestamp"></column>
+            <column name="end_date_in_department" type="timestamp"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_position_employee" author="oadmin">
+        <createTable tableName="position_employee">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_position_employee">
+                <constraints primaryKey="true" primaryKeyName="pk_position_employee_id" nullable="false"/>
+            </column>
+            <column name="employee_id" type="bigint"></column>
+            <column name="position_id" type="bigint"></column>
+            <column name="description" type="varchar(255)"></column>
+            <column name="start_date_for_position" type="timestamp"></column>
+            <column name="end_date_for_position" type="timestamp"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_hiring_employee_info" author="oadmin">
+        <createTable tableName="hiring_employee_info">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_hiring_employee_info">
+                <constraints primaryKey="true" primaryKeyName="pk_hiring_employee_info_id" nullable="false"/>
+            </column>
+            <column name="employee_id" type="bigint"></column>
+            <column name="date_of_hiring" type="date"></column>
+            <column name="date_of_dismissal" type="date"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_position" author="oadmin">
+        <createTable tableName="position">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_position">
+                <constraints primaryKey="true" primaryKeyName="pk_position_id" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"></column>
+            <column name="is_active" type="boolean"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_table_personal_info" author="oadmin">
+        <createTable tableName="personal_info">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_personal_info">
+                <constraints primaryKey="true" primaryKeyName="pk_personal_info_id" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)"></column>
+            <column name="last_name" type="varchar(255)"></column>
+            <column name="adress" type="varchar(255)"></column>
+            <column name="email" type="varchar(255)"></column>
+            <column name="skype" type="varchar(255)"></column>
+            <column name="phone_number" type="varchar(255)"></column>
+            <column name="description" type="varchar(255)"></column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated" type="timestamp"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_foreign_key_constraints" author="oadmin">
+        <addForeignKeyConstraint
+                constraintName="fk_department_employee"
+                baseTableName="department"
+                baseColumnNames="manager_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_dep_emp_department"
+                baseTableName="department_employee"
+                baseColumnNames="department_id"
+                referencedTableName="department"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_dep_emp_employee"
+                baseTableName="department_employee"
+                baseColumnNames="employee_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_hiring_employee_info_employee"
+                baseTableName="hiring_employee_info"
+                baseColumnNames="employee_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_employee_personal_info"
+                baseTableName="employee"
+                baseColumnNames="personal_info_id"
+                referencedTableName="personal_info"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_position_employee_employee"
+                baseTableName="position_employee"
+                baseColumnNames="employee_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_position_employee_position"
+                baseTableName="position_employee"
+                baseColumnNames="position_id"
+                referencedTableName="position"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+    </changeSet>
+
+
+
+</databaseChangeLog>

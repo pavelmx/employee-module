@@ -12,6 +12,11 @@ plugins {
     id 'java'
 }
 
+apply from: "defaults.gradle"
+if (hasProperty('profile')) {
+    apply from: "profile-${profile}.gradle"
+}
+
 apply plugin: 'idea'
 apply plugin: 'liquibase'
 

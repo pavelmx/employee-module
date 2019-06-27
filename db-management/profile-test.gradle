@@ -1,0 +1,8 @@
+allprojects {
+    ext {
+        dbUrl = 'jdbc:postgresql://localhost:5432/postgres?currentSchema=employee_schema_test'
+        dbUsername = 'postgres'
+        dbPassword = '54321'
+        _runList = 'test'
+    }
+}

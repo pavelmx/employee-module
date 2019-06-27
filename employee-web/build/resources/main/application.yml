@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8087
+
+logging:
+  level:
+    org.springframework: ERROR
+    com.innowise: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+  file: app.log
+
+---
+
+spring:
+  profiles: dev
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=employee_schema
+    username: postgres
+    password: 54321
+
+---
+
+spring:
+  profiles: test
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=employee_schema_test
+    username: postgres
+    password: 54321
+
