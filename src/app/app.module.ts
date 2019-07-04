@@ -18,7 +18,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgbdSortableHeader } from './util/sortable.directive';
 import { ToastrModule } from 'ngx-toastr';
 import { StorageService } from './services/storage.service';
-import { OrderModule } from 'ngx-order-pipe';
+import { HomeComponent } from './home/home.component';
+
 
 @NgModule({
   declarations: [
@@ -29,10 +30,11 @@ import { OrderModule } from 'ngx-order-pipe';
     HiringInfoListComponent,
     DepartmentEmployeeListComponent,
     PositionEmployeeListComponent,
-    NgbdSortableHeader
+    NgbdSortableHeader,
+    HomeComponent
   ],
   imports: [
-    OrderModule,
+    
     NgbModule,
     BrowserModule,
     AppRoutingModule,

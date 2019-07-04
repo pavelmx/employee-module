@@ -16,7 +16,7 @@ import { StorageService } from '../services/storage.service';
 import { PositionEmployeeService } from '../services/position-employee.service';
 import { DepartmentEmployeeService } from '../services/department-employee.service';
 import { DepartmentPosition } from '../models/department-position.model';
-import { OrderModule } from 'ngx-order-pipe';
+
 import { DepartmentPositionService } from '../services/department-position.service';
 
 @Component({
