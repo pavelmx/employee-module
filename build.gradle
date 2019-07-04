@@ -102,8 +102,6 @@ task getHomeDir {
 	}
 }
 
-
-
 task insertData(type: JavaExec) {
 	group = "Liquibase"
 	classpath configurations.liquibaseRuntime
